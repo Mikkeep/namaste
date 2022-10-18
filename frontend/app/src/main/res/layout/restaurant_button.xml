@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/idRLContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="60dp"
+    tools:context=".HomeActivity">
+
+    <FrameLayout
+        android:id="@+id/idFrame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <!--on below line we are creating an image button-->
+
+        <!--on below line we are creating a
+             text for our image button-->
+
+        <ImageButton
+            android:id="@+id/idImgBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FA8E88"
+            android:src="@drawable/ic_banner_foreground" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="45dp"
+            android:clickable="false"
+            android:padding="10dp"
+            android:text="Restaurant 1"
+            android:textSize="40dp"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+    </FrameLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="13dp"
+        android:elevation="7dp">
+        <ImageView
+            android:id="@+id/menu_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_baseline_menu_24"
+            android:layout_centerVertical="true"
+            android:scaleType="fitXY"/>
+
+        <TextView
+            android:id="@+id/restaurants_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white"
+            android:textSize="25dp"
+            android:text="RESTAURANTS" />
+    </RelativeLayout>
+
+</LinearLayout>
