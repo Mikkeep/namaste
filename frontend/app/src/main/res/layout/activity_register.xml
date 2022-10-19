@@ -21,22 +21,22 @@
         app:layout_constraintVertical_bias="0.12"/>
 
     <EditText
-    android:id="@+id/reg_username"
-    android:layout_width="256dp"
-    android:layout_height="47dp"
-    android:layout_marginBottom="484dp"
-    android:autofillHints="Enter Username"
-    android:background="@drawable/text_border"
-    android:fontFamily="sans-serif-black"
-    android:hint="@string/username"
-    android:padding="10dp"
-    android:textColor="@color/black"
-    android:inputType="textPersonName"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.496"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintVertical_bias="0.892" />
+        android:id="@+id/reg_username"
+        android:layout_width="256dp"
+        android:layout_height="47dp"
+        android:layout_marginBottom="484dp"
+        android:autofillHints="Enter Username"
+        android:background="@drawable/text_border"
+        android:fontFamily="sans-serif-black"
+        android:hint="@string/username"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="0.892" />
 
     <EditText
         android:id="@+id/reg_password"
