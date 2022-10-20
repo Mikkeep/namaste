@@ -5,6 +5,7 @@
 Run these commands from the directory root folder.
 
 **Export Flask environment variable**
+
 *Linux*
 ```shell
 $ export FLASK_APP=backend
