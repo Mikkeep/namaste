@@ -1,4 +1,5 @@
-package com.example.loginapp;
+package com.example.namaste;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,13 +13,13 @@ import android.content.Context;
 
 import com.google.android.material.button.MaterialButton;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     // login activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
 
         TextView username = findViewById(R.id.username);
@@ -32,12 +33,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(username.getText().toString().equals("admin") && password.getText().toString().equals("1234")){
-                    Toast.makeText(MainActivity.this, "Login success!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(view.getContext(), HomeActivity.class);
+                    Toast.makeText(LoginActivity.this, "Login success!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(view.getContext(), MainActivity.class);
                     startActivity(intent);
                 }
                 else {
-                    Toast.makeText(MainActivity.this, "Login failed!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Login failed!", Toast.LENGTH_SHORT).show();
                 }
             }
         });

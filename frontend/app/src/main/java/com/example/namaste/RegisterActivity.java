@@ -1,8 +1,6 @@
-package com.example.loginapp;
+package com.example.namaste;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,6 +22,7 @@ public class RegisterActivity extends AppCompatActivity {
         TextView password = findViewById(R.id.reg_password);
 
         Button registerButton = (MaterialButton) findViewById(R.id.regBtn);
+        Button cancelButton = (MaterialButton) findViewById(R.id.regCancel);
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,6 +36,13 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Register successful!", Toast.LENGTH_SHORT).show();
                     finish();
                 }
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }
