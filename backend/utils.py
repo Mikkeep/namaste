@@ -31,6 +31,12 @@ def dict_factory(cursor, row):
 
 
 def fetch_item(command):
-    user = get_db().execute(command).fetchone()
+    item = get_db().execute(command).fetchone()
     close_db()
-    return user
+    return item
+
+
+def fetch_items(command):
+    items = get_db().execute(command).fetchall()
+    close_db()
+    return items
