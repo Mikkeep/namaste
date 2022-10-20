@@ -49,9 +49,10 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                OkHttpPostRequest postReq = new OkHttpPostRequest();
                 String msg = String.format("{\r\n    \"username\": \"%s\",\r\n    \"password\": \"%s\"\r\n}", username.getText().toString(), password.getText().toString());
                 Log.d("message content: ", msg);
-                String response = doPostRequest(username.getText().toString(), password.getText().toString());
+                String response = postReq.doPostRequest(username.getText().toString(), password.getText().toString(), "login");
                 Log.d("response was: ", response);
                 if(response.contains("200")) {
                     Toast.makeText(LoginActivity.this, "Login success!", Toast.LENGTH_SHORT).show();
@@ -73,23 +74,5 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
     // does the post request through emulators IP to 127.0.0.1
-    public static String doPostRequest(String username, String password) {
-        OkHttpClient client = new OkHttpClient().newBuilder()
-                .build();
-        MediaType mediaType = MediaType.parse("application/json");
-        String msg = String.format("{\r\n    \"username\": \"%s\",\r\n    \"password\": \"%s\"\r\n}", username, password);
-        RequestBody body = RequestBody.create(mediaType, msg);
-        Request request = new Request.Builder()
-                .url("http://10.0.2.2:5000/api/users/login/")
-                .method("POST", body)
-                .addHeader("Content-Type", "application/json")
-                .build();
-        try {
-            Response response = client.newCall(request).execute();
-            return response.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "POST REQUEST ERROR";
-    }
+
 }
