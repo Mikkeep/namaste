@@ -19,7 +19,7 @@ Windows
 $ flask --app backend init-db
 ```
 
-**Fill database with test data**
+**Fill database with test data(NOTE: if you have done this once it will result in UNIQUE constraint failed error)**
 
 ```shell
 $ flask --app backend testgen
