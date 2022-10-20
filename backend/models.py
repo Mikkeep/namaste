@@ -30,6 +30,26 @@ class User(DB.Model):
         return schema
 
 
+class Restaurant(DB.Model):
+    """
+    Restaurant database model
+    """
+
+    __tablename__ = "restaurant"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), unique=True, nullable=False)
+    description = Column(String(200), unique=False, nullable=False)
+
+    @staticmethod
+    def json_schema():
+        """Returns the schema for Restaurant"""
+        schema = {"type": "object", "required": ["name", "description"]}
+        props = schema["properties"] = {}
+        props["name"] = {"description": "name", "type": "string"}
+        props["description"] = {"description": "description", "type": "string"}
+        return schema
+
+
 class Orderitem(DB.Model):
     """
     Order items database model
@@ -72,9 +92,13 @@ class Order(DB.Model):
     __tablename__ = "order"
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("user.id"))
+    restaurant_id = Column(Integer, ForeignKey("restaurant.id"))
     description = Column(String(2000), nullable=False)
 
     user = relationship("User", backref=backref("user", cascade="all, delete-orphan"))
+    restaurant = relationship(
+        "Restaurant", backref=backref("restaurant", cascade="all, delete-orphan")
+    )
 
     @staticmethod
     def json_schema():
@@ -101,7 +125,7 @@ class Item(DB.Model):
 
     @staticmethod
     def json_schema():
-        """Returns the schema for Ingredient"""
+        """Returns the schema for Item"""
         schema = {"type": "object", "required": ["name"]}
         props = schema["properties"] = {}
         props["name"] = {"description": "Name of item", "type": "string"}
@@ -127,7 +151,24 @@ def generate_test_data():
     """
     Generate content for database for testing
     """
-    p_0 = User(username="Bob", password="supersecurepassword123456", is_admin=True)
+    print("Generating test users...")
+    p_0 = User(username="Admin", password="supersecurepassword123456", is_admin=True)
     DB.session.add(p_0)
     DB.session.commit()
-    print("Test generation succesful")
+    p_1 = User(username="Bob", password="password", is_admin=False)
+    DB.session.add(p_1)
+    DB.session.commit()
+    print("Test generation of Users successful")
+    print("Generating restaurants...")
+    r_0 = Restaurant(
+        name="Bob's burgers", description="Almost as good as Alices aspargus'."
+    )
+    r_1 = Restaurant(
+        name="Alice's aspargus", description="Definitely better than Bob's burgers."
+    )
+    DB.session.add(r_0)
+    DB.session.add(r_1)
+    DB.session.commit()
+    print("Restaurants generation successful.")
+    print()
+    print("Test generation successful!")

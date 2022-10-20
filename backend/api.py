@@ -5,9 +5,11 @@ from flask import Blueprint
 from flask_restful import Api
 
 from .resources.user import UserLogin, UserRegister
+from .resources.restaurant import Restaurant
 
 API_BP = Blueprint("api", __name__, url_prefix="/api")
 API = Api(API_BP)
 
 API.add_resource(UserLogin, "/users/login/")
 API.add_resource(UserRegister, "/users/register/")
+API.add_resource(Restaurant, "/restaurant/all")

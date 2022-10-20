@@ -51,3 +51,32 @@ C:\> backend\env\Scripts\activate.bat
 ```shell
 pip install -r backend\requirements.txt
 ```
+
+***
+
+### FAQ
+
+<br>
+
+**Flask --app produces error**
+
+Flask command `flask --app <option>` produces following error:
+
+```shell
+Error: No such option: --app
+```
+
+> Make sure you have activated virtual environment as stated in the Installation guide.
+
+<br>
+
+**Flask run does not work**
+
+Starting Flask application does not work with command:
+`flask run` producing error:
+
+```shell
+Error: Could not import 'backend.backend'
+```
+
+> Navigate to git root folder and try the command again. The command does not work from the backend folder as it can not import itself from inside the folder.
