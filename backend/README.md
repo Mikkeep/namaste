@@ -5,11 +5,14 @@
 Run these commands from the directory root folder.
 
 **Export Flask environment variable**
-
+Linux
 ```shell
 $ export FLASK_APP=backend
 ```
-
+Windows
+```shell
+  set FLASK_APP=backend
+```
 **Initialize database**
 
 ```shell
