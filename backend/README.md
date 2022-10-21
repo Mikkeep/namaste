@@ -6,17 +6,21 @@ Run these commands from the directory root folder.
 
 **Export Flask environment variable**
 
+*Linux*
 ```shell
 $ export FLASK_APP=backend
 ```
-
+*Windows*
+```shell
+  set FLASK_APP=backend
+```
 **Initialize database**
 
 ```shell
 $ flask --app backend init-db
 ```
 
-**Fill database with test data**
+**Fill database with test data(NOTE: if you have done this once it will result in UNIQUE constraint failed error)**
 
 ```shell
 $ flask --app backend testgen
