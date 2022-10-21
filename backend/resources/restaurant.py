@@ -1,31 +1,41 @@
 """ Methods for Restaurants """
 
 import json
-from flask import request, Response
+from flask import Response, session
 from flask_restful import Resource
+from .. import DB
 
-from backend.models import User, Restaurant
-from ..constants import JSON
-from ..utils import fetch_items
-from sqlite3 import IntegrityError
-from jsonschema import validate, ValidationError, draft7_format_checker
+from backend.models import Restaurant
+from ..constants import JSON, HIDDEN_RESTAURANT
+from ..utils import ensure_login
 
 
-class Restaurant(Resource):
+class Restaurants(Resource):
     """Methods for restaurants listed in the database"""
 
+    @ensure_login
     def get(self):
-        command = "SELECT * FROM restaurant WHERE NOT name = 'Bob burgers'"
-        restaurants = fetch_items(command)
-
-        if restaurants is None:
-            return Response(
-                status=404,
-                response=json.dumps("Restaurants do not exist!"),
+        """Return list of all restaurants"""
+        if session["id"] == 1:
+            restaurants = DB.session.query(Restaurant).all()
+        else:
+            restaurants = (
+                DB.session.query(Restaurant)
+                .filter(Restaurant.name != HIDDEN_RESTAURANT)
+                .all()
             )
 
+        listing = []
+        for restaurant in restaurants:
+            info = {
+                "id": restaurant.id,
+                "name": restaurant.name,
+                "description": restaurant.description,
+            }
+            listing.append(info)
+
         data = {
-            "restaurants": restaurants,
+            "restaurants": listing,
         }
 
         return Response(

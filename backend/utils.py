@@ -2,8 +2,9 @@
 Utility methods for Flask
 """
 
+import json
 import sqlite3
-from flask import g
+from flask import g, session, Response
 from .constants import DB_LOCATION
 
 
@@ -40,3 +41,18 @@ def fetch_items(command):
     items = get_db().execute(command).fetchall()
     close_db()
     return items
+
+
+def ensure_login(func):
+    """Checks session["id"] state before resource access"""
+
+    def server(*args, **kwargs):
+        if session.get("id") == None:
+            return Response(
+                status=401,
+                response=json.dumps("Please log in."),
+            )
+        exec = func(*args, **kwargs)
+        return exec
+
+    return server

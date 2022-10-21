@@ -1,7 +1,7 @@
 """ Methods for Users """
 
 import json
-from flask import request, Response
+from flask import request, Response, session
 from flask_restful import Resource
 
 from backend.models import User
@@ -15,7 +15,7 @@ class UserLogin(Resource):
     """Methods for single user"""
 
     def post(self):
-        """Get method functionality for single user"""
+        """Post method functionality for single user"""
         if not request.json:
             return Response(
                 status=415,
@@ -54,6 +54,8 @@ class UserLogin(Resource):
         data = {
             "name": user["username"],
         }
+
+        session["id"] = user["id"]
 
         return Response(
             status=200,
@@ -104,3 +106,14 @@ class UserRegister(Resource):
             return Response(status=401, response=json.dumps("User already exists."))
 
         return Response(status=200, response=json.dumps("User created successfully."))
+
+
+class UserLogout(Resource):
+    """Method for logging user out"""
+
+    def post(self):
+        """Post method functionality for logging user out"""
+        session["id"] = None
+        return Response(
+            status=200, response=json.dumps("User logged out successfully.")
+        )

@@ -166,8 +166,12 @@ def generate_test_data():
     r_1 = Restaurant(
         name="Alice's aspargus", description="Definitely better than Bob's burgers."
     )
+    r_2 = Restaurant(
+        name="VIP Lounge", description="A secret VIP lounge for high class customers."
+    )
     DB.session.add(r_0)
     DB.session.add(r_1)
+    DB.session.add(r_2)
     DB.session.commit()
     print("Restaurants generation successful.")
     print()
