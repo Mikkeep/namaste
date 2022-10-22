@@ -1,6 +1,18 @@
 ## Backend documentation
 
-### Environment setup
+### Docker usage
+
+Both [Docker](https://www.docker.com/) and [Docker compose](https://docs.docker.com/compose/install/linux/) are needed for the installation of the backend container. Make sure to have these on your system before attempting to build the service.
+
+Run command:
+
+```bash
+docker-compose up -d
+```
+
+This will run the Docker compose file to build and setup the container automatically. It will be accessible through ```localhost:5000``` once installation is complete.
+
+### Environment setup without Docker
 
 Run these commands from the directory root folder.
 
