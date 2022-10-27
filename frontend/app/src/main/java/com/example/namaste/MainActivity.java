@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -15,18 +14,16 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.material.navigation.NavigationView;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
@@ -37,8 +34,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // placeholder restaurant name array for buttons (replace with results of a query of backend)
-        String[] restNames = new String[]{"Bob's Burgers", "Alice's Apples", "Peter's Pies", "DjRonalds", "Hasburger", "Segway", "Taco Ball"};
-        String[] restDesc = new String[]{"Best burgers!", "Delicious Apples", "Mmm...pies", "What is McDonalds?", "Its in the game", "Eat fresh", "TexMex restaurant"};
+        String[] restNames = new String[]{"Bob's Burgers", "Alice's Apples", "Peter's Pies",
+                "DjRonald's", "Hasburger", "Segway", "Taco Ball"};
+        String[] restDesc = new String[]{"Best burgers!", "Delicious Apples", "Mmm...pies",
+                "What is McDonald's?", "Its in the game", "Eat fresh", "TexMex restaurant"};
 
         // importing linearlayout for buttons
         // nested in a scrollview for scrolling
@@ -71,12 +70,43 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
 
         // to make the Navigation drawer icon always appear on the action bar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        // implement navigation view to use nav_drawer buttons for navigation in the app
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
-    // click listener callback
-    // to open and close the navigation
-    // drawer when the icon is clicked
+    // click listener for the navigation drawer items
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        Intent myIntent;
+
+        try {
+            if (id == R.id.nav_account) {
+                myIntent = new Intent(getApplicationContext(), AccountActivity.class);
+            } else if (id == R.id.nav_cart) {
+                myIntent = new Intent(getApplicationContext(), CartActivity.class);
+            } else if (id == R.id.nav_orders) {
+                myIntent = new Intent(getApplicationContext(), OrdersActivity.class);
+            } else if (id == R.id.nav_about) {
+                myIntent = new Intent(getApplicationContext(), AboutActivity.class);
+            } else if (id == R.id.nav_logout) {
+                myIntent = new Intent(getApplicationContext(), LoginActivity.class);
+            } else {
+                throw new Exception("Invalid item clicked!");
+            }
+            startActivity(myIntent);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    // click listener for the navigation drawer toggle
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
@@ -87,14 +117,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // click listener for the restaurant buttons
-    private View.OnClickListener restaurantButtonListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            // check which button was clicked
-            Button btn = (Button) v;
-            Toast.makeText(MainActivity.this, "Clicked button " + v.getId(), Toast.LENGTH_SHORT).show();
-        }
+    private final View.OnClickListener restaurantButtonListener = v -> {
+        // check which button was clicked
+        Button btn = (Button) v;
+        Toast.makeText(MainActivity.this, "Clicked button " + btn.getId(), Toast.LENGTH_SHORT).show();
     };
+
 
 }
