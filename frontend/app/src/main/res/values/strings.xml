@@ -10,8 +10,9 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="cancel">Cancel</string>
 
-    <string name="register">register</string>
+    <string name="register">Register</string>
     <string name="namaste">namaste</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="restaurants">RESTAURANTS</string>

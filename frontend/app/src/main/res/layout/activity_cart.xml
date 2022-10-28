@@ -7,14 +7,6 @@
     tools:context=".CartActivity"
     tools:ignore="HardcodedText">
 
-
-    <!-- toolbar currently not called in java code. Uses the default
-    android toolbar-->
-    <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
