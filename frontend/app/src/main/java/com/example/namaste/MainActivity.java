@@ -27,14 +27,24 @@ import com.google.android.material.navigation.NavigationView;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
-    private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // init navigation drawer and action bar
+        DrawerLayout drawerLayout;
         ActionBar actionBar = getSupportActionBar();
+
+
+        // importing linearlayout for buttons
+        // nested in a scrollview for scrolling
+        LinearLayout restaurantBoard = (LinearLayout) findViewById(R.id.l1);
+        // set the size of the individual buttons
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(1000, 300);
+
 
         // placeholder restaurant name array for buttons (replace with results of backend query)
         String[] restNames = new String[]
@@ -44,15 +54,11 @@ public class MainActivity extends AppCompatActivity
                 {"Best burgers by big boss Bob!", "My apples bring all boys to the yard", "Mmm...pies",
                 "Who's McDonald?", "Can I haz cheezburger?", "Eat fast", "You can't resist our balls"};
         Integer[] restIcons = new Integer[]
-                       {R.drawable.burger, R.drawable.alice_apple, R.drawable.peter_pie,
+                       {R.drawable.bobs_burgers, R.drawable.alice_apple, R.drawable.peter_pie,
                         R.drawable.djronald, R.drawable.hasburger, R.drawable.segway,
                         R.drawable.taco_ball};
 
-        // importing linearlayout for buttons
-        // nested in a scrollview for scrolling
-        LinearLayout restaurantBoard = (LinearLayout) findViewById(R.id.l1);
-        // set the size of the individual buttons
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(1000, 300);
+        // Add restaurant buttons in loop
         for (int i = 0; i < restNames.length; i++) {
             Button btn = new Button(this);
             btn.setId(i);
@@ -60,10 +66,11 @@ public class MainActivity extends AppCompatActivity
             btn.setText(span);
             btn.setLayoutParams(lp);
             btn.setOnClickListener(restaurantButtonListener);
-            // sets the icon for button
 
+            // set the icon for button
             Drawable icon = ResourcesCompat.getDrawable(getApplicationContext().getResources(),
                     restIcons[i], null);
+            assert icon != null;
             Bitmap bitmap = ((BitmapDrawable) icon).getBitmap();
             Drawable resizedIcon = new BitmapDrawable(getResources(),
                     Bitmap.createScaledBitmap(bitmap, 90, 90, true));
@@ -78,7 +85,6 @@ public class MainActivity extends AppCompatActivity
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
 
         // pass the Open and Close toggle for the drawer layout listener
-        // to toggle the button
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
@@ -99,6 +105,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         Intent myIntent;
 
+        // define action for each navigation drawer button
         try {
             if (id == R.id.nav_account) {
                 myIntent = new Intent(getApplicationContext(), AccountActivity.class);

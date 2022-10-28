@@ -1,28 +1,23 @@
 <resources>
     <string name="app_name">NAMASTE</string>
-    <string name="vuush">VUUSH</string>
-    <string name="username">Username</string>
-    <string name="password">Password</string>
-    <string name="login">LOGIN</string>
-    <string name="title_activity_home">HomeActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-    <string name="cancel">Cancel</string>
 
-    <string name="register">Register</string>
-    <string name="namaste">namaste</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="restaurants">RESTAURANTS</string>
-    <string name="insert_content_here">Insert content here :D</string>
+    <!-- Navigation drawer labels -->
     <string name="sub_main">Main Menu</string>
     <string name="sub_account">My Account</string>
     <string name="sub_orders">Orders</string>
     <string name="sub_cart">Cart</string>
     <string name="sub_about">About</string>
 
+    <!-- Login and register label texts -->
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login_log_in">Log In</string>
+    <string name="login_forgot_pw">Forgot password?</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- About body texts -->
     <string name="about_body_text">
         NAMASTE is an application for ordering meals from the best restaurants in Oulu, Finland.\n( ͡° ͜ʖ ͡°)
     </string>
