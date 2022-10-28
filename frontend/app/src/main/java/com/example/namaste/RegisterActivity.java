@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
@@ -25,6 +26,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         Button registerButton = (MaterialButton) findViewById(R.id.regBtn);
         Button cancelButton = (MaterialButton) findViewById(R.id.regCancel);
+
+        // Show plain action bar with only app name
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.show();
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override

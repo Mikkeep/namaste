@@ -20,7 +20,15 @@
         android:title="About" />
 
     <item
+        android:id="@+id/nav_dark_mode"
+        android:title="Toggle dark mode"
+        />
+
+    <item
         android:id="@+id/nav_logout"
-        android:title="Logout" />
+        android:title="Log out" />
+
+
+
 
 </menu>

@@ -8,6 +8,7 @@
     android:id="@+id/nav_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/Theme.NAMASTE"
     tools:context=".MainActivity">
 
     <ScrollView

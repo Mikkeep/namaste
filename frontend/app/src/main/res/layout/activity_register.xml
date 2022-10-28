@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterActivity"
-    android:background="#7C97C6">
+    style="@style/Theme.NAMASTE"
+    tools:context=".RegisterActivity">
     <TextView
         android:id="@+id/login"
         android:layout_width="wrap_content"

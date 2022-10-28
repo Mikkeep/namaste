@@ -1,6 +1,7 @@
 package com.example.namaste;
 
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -35,16 +36,17 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
 
         TextView username = findViewById(R.id.username);
         TextView password = findViewById(R.id.password);
 
         Button loginButton = (MaterialButton) findViewById(R.id.loginBtn);
         Button registerButton = (MaterialButton) findViewById(R.id.registerBtn);
+
+        // Show plain action bar with only app name
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.show();
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
