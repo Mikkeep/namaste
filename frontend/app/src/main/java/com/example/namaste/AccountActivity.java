@@ -13,6 +13,7 @@ public class AccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_account);
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setSubtitle(R.string.sub_account);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 }

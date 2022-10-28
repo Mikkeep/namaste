@@ -1,5 +1,6 @@
 package com.example.namaste;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.text.Spannable;
@@ -22,22 +24,29 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener{
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-
-    public DrawerLayout drawerLayout;
-    public ActionBarDrawerToggle actionBarDrawerToggle;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ActionBar actionBar = getSupportActionBar();
 
-        // placeholder restaurant name array for buttons (replace with results of a query of backend)
-        String[] restNames = new String[]{"Bob's Burgers", "Alice's Apples", "Peter's Pies",
-                "DjRonald's", "Hasburger", "Segway", "Taco Ball"};
-        String[] restDesc = new String[]{"Best burgers!", "Delicious Apples", "Mmm...pies",
-                "What is McDonald's?", "Its in the game", "Eat fresh", "TexMex restaurant"};
+        // placeholder restaurant name array for buttons (replace with results of backend query)
+        String[] restNames = new String[]
+                {"Bob's Burgers", "Alice's Apples", "Peter's Pies",
+                "DjRonald's", "HazBurger", "Segway", "Taco Ball"};
+        String[] restDesc = new String[]
+                {"Best burgers by big boss Bob!", "My apples bring all boys to the yard", "Mmm...pies",
+                "Who's McDonald?", "Can I haz cheezburger?", "Eat fast", "You can't resist our balls"};
+        Integer[] restIcons = new Integer[]
+                       {R.drawable.burger, R.drawable.alice_apple, R.drawable.peter_pie,
+                        R.drawable.djronald, R.drawable.hasburger, R.drawable.segway,
+                        R.drawable.taco_ball};
 
         // importing linearlayout for buttons
         // nested in a scrollview for scrolling
@@ -47,15 +56,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         for (int i = 0; i < restNames.length; i++) {
             Button btn = new Button(this);
             btn.setId(i);
-            Spannable span = new SpannableString(restNames[i]+"\n-"+restDesc[i]);
+            Spannable span = new SpannableString(restNames[i]+"\n\""+restDesc[i]+"\"");
             btn.setText(span);
             btn.setLayoutParams(lp);
             btn.setOnClickListener(restaurantButtonListener);
             // sets the icon for button
-            Drawable icon = getApplicationContext().getResources().getDrawable(R.drawable.burger);
+
+            Drawable icon = ResourcesCompat.getDrawable(getApplicationContext().getResources(),
+                    restIcons[i], null);
             Bitmap bitmap = ((BitmapDrawable) icon).getBitmap();
-            Drawable resizedIcon = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 200, 200, true));
-            btn.setCompoundDrawablesWithIntrinsicBounds(null, null, resizedIcon, null);
+            Drawable resizedIcon = new BitmapDrawable(getResources(),
+                    Bitmap.createScaledBitmap(bitmap, 90, 90, true));
+            btn.setCompoundDrawablesWithIntrinsicBounds(null, null,
+                    resizedIcon, null);
             restaurantBoard.addView(btn);
         }
 
@@ -70,8 +83,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionBarDrawerToggle.syncState();
 
         // to make the Navigation drawer icon always appear on the action bar
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setSubtitle(R.string.sub_main);
         }
 
         // implement navigation view to use nav_drawer buttons for navigation in the app
