@@ -16,6 +16,20 @@ This will run the Docker compose file to build and setup the container automatic
 
 Run these commands from the directory root folder.
 
+### Installation
+
+**For Linux/MacOS**
+
+```shell
+$ source backend/env/bin/activate
+```
+
+```shell
+$ pip install -r backend/requirements.txt
+```
+
+---
+
 **Export Flask environment variable**
 
 *Linux*
@@ -43,20 +57,6 @@ $ flask --app backend testgen
 ```shell
 $ flask run
 ```
-
-### Installation
-
-**For Linux/MacOS**
-
-```shell
-$ source backend/env/bin/activate
-```
-
-```shell
-$ pip install -r backend/requirements.txt
-```
-
----
 
 **For Windows**
 
