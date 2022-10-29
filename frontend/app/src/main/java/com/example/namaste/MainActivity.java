@@ -1,6 +1,5 @@
 package com.example.namaste;
 
-import static android.util.Log.println;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_UNSPECIFIED;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
@@ -46,22 +45,39 @@ public class MainActivity extends AppCompatActivity
 
         // importing linearlayout for buttons
         // nested in a scrollview for scrolling
-        LinearLayout restaurantBoard = (LinearLayout) findViewById(R.id.l1);
+        LinearLayout restaurantBoard = findViewById(R.id.l1);
         // set the size of the individual buttons
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(1000, 600);
 
 
         // placeholder restaurant name array for buttons (replace with results of backend query)
-        String[] restNames = new String[]
-                {"Bob's Burgers", "Alice's Apples", "Peter's Pies",
-                "DjRonald's", "HazBurger", "Segway", "Taco Ball"};
-        String[] restDesc = new String[]
-                {"Best blocky burgers by big burger builder Bob!", "My apples bring all boys to the yard", "Mmm...pies",
-                "Who's McDonald?", "Can I haz cheezburger?", "Eat fast", "You can't resist our balls"};
-        Integer[] restIcons = new Integer[]
-                       {R.drawable.bobs_burgers, R.drawable.alice_apple, R.drawable.peter_pie,
-                        R.drawable.djronald, R.drawable.hasburger, R.drawable.segway,
-                        R.drawable.taco_ball};
+        String[] restNames = new String[]{
+                "Bob's Burgers",
+                "Alice's Apples",
+                "Peter's Pies",
+                "DjRonald's",
+                "HazBurger",
+                "Segway",
+                "Taco Ball"
+        };
+        String[] restDesc = new String[]{
+                "Best blocky burgers by big burger builder Bob!",
+                "My apples bring all boys to the yard",
+                "Mmm...pies",
+                "Who's McDonald?",
+                "Can I haz cheezburger?",
+                "Eat fast",
+                "You can't resist our balls"
+        };
+        Integer[] restIcons = new Integer[]{
+                R.drawable.bobs_burgers,
+                R.drawable.alice_apple,
+                R.drawable.peter_pie,
+                R.drawable.djronald,
+                R.drawable.hasburger,
+                R.drawable.segway,
+                R.drawable.taco_ball
+        };
 
         // Add restaurant buttons in loop (replace this with foreach loop after backend req works)
         for (int i = 0; i < restNames.length; i++) {
@@ -88,7 +104,11 @@ public class MainActivity extends AppCompatActivity
         // drawer layout instance to toggle the menu icon to open
         // drawer and back button to close drawer
         drawerLayout = findViewById(R.id.nav_drawer_layout);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                R.string.nav_open,
+                R.string.nav_close);
         // pass the Open and Close toggle for the drawer layout listener
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
@@ -137,7 +157,6 @@ public class MainActivity extends AppCompatActivity
             else {
                 throw new Exception("Invalid item clicked!");
             }
-            ;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -160,6 +179,4 @@ public class MainActivity extends AppCompatActivity
         Button btn = (Button) v;
         Toast.makeText(MainActivity.this, "Clicked button " + btn.getId(), Toast.LENGTH_SHORT).show();
     };
-
-
 }
