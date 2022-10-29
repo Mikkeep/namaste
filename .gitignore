@@ -12,7 +12,8 @@ __pycache__/
 *.so
 
 # Hidden gradle
-.graddle
+.gradle
+local.properties
 
 # Distribution / packaging
 .Python

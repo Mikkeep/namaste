@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="horizontal"
     tools:context=".AboutActivity"
     tools:ignore="HardcodedText">
-
-    <!-- toolbar currently not called in java code. Uses the default
-    android toolbar-->
-    <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-    />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="About"/>
+        android:gravity="top|center"
+        android:text="@string/about_body_text"
+        android:textColor="@color/black"
+        android:textSize="20sp"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal|bottom"
+        android:text="@string/about_license_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

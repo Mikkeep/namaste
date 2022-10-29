@@ -13,6 +13,7 @@ public class CartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cart);
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setSubtitle(R.string.sub_cart);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 }

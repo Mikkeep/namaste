@@ -15,6 +15,7 @@ public class OrdersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_orders);
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setSubtitle(R.string.sub_orders);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 }

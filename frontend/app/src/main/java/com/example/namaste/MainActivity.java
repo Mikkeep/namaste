@@ -1,5 +1,10 @@
 package com.example.namaste;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_UNSPECIFIED;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,6 +15,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.text.Spannable;
@@ -22,56 +29,93 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener{
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-
-    public DrawerLayout drawerLayout;
-    public ActionBarDrawerToggle actionBarDrawerToggle;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // placeholder restaurant name array for buttons (replace with results of a query of backend)
-        String[] restNames = new String[]{"Bob's Burgers", "Alice's Apples", "Peter's Pies",
-                "DjRonald's", "Hasburger", "Segway", "Taco Ball"};
-        String[] restDesc = new String[]{"Best burgers!", "Delicious Apples", "Mmm...pies",
-                "What is McDonald's?", "Its in the game", "Eat fresh", "TexMex restaurant"};
+        // init navigation drawer and action bar
+        DrawerLayout drawerLayout;
+        ActionBar actionBar = getSupportActionBar();
 
         // importing linearlayout for buttons
         // nested in a scrollview for scrolling
-        LinearLayout restaurantBoard = (LinearLayout) findViewById(R.id.l1);
+        LinearLayout restaurantBoard = findViewById(R.id.l1);
         // set the size of the individual buttons
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(1000, 300);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(1000, 600);
+
+        // placeholder restaurant name array for buttons (replace with results of backend query)
+        String[] restNames = new String[]{
+                "Bob's Burgers",
+                "Alice's Apples",
+                "Peter's Pies",
+                "DjRonald's",
+                "HazBurger",
+                "Segway",
+                "Taco Ball"
+        };
+        String[] restDesc = new String[]{
+                "Best blocky burgers by big burger builder Bob!",
+                "My apples bring all boys to the yard",
+                "Mmm...pies",
+                "Who's McDonald?",
+                "Can I haz cheezburger?",
+                "Eat fast",
+                "You can't resist our balls"
+        };
+        Integer[] restIcons = new Integer[]{
+                R.drawable.bobs_burgers,
+                R.drawable.alice_apple,
+                R.drawable.peter_pie,
+                R.drawable.djronald,
+                R.drawable.hasburger,
+                R.drawable.segway,
+                R.drawable.taco_ball
+        };
+
+        // Add restaurant buttons in loop (replace this with foreach loop after backend req works)
         for (int i = 0; i < restNames.length; i++) {
             Button btn = new Button(this);
             btn.setId(i);
-            Spannable span = new SpannableString(restNames[i]+"\n-"+restDesc[i]);
+            Spannable span = new SpannableString(restNames[i]+"\n\""+restDesc[i]+"\"");
             btn.setText(span);
+            btn.setTextSize(20);
             btn.setLayoutParams(lp);
             btn.setOnClickListener(restaurantButtonListener);
-            // sets the icon for button
-            Drawable icon = getApplicationContext().getResources().getDrawable(R.drawable.burger);
+
+            // set the icon for button
+            Drawable icon = ResourcesCompat.getDrawable(getApplicationContext().getResources(),
+                    restIcons[i], null);
+            assert icon != null;
             Bitmap bitmap = ((BitmapDrawable) icon).getBitmap();
-            Drawable resizedIcon = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 200, 200, true));
-            btn.setCompoundDrawablesWithIntrinsicBounds(null, null, resizedIcon, null);
+            Drawable resizedIcon = new BitmapDrawable(getResources(),
+                    Bitmap.createScaledBitmap(bitmap, 160, 160, true));
+            btn.setCompoundDrawablesWithIntrinsicBounds(null, null,
+                    resizedIcon, null);
             restaurantBoard.addView(btn);
         }
 
         // drawer layout instance to toggle the menu icon to open
         // drawer and back button to close drawer
         drawerLayout = findViewById(R.id.nav_drawer_layout);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
-
+        actionBarDrawerToggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                R.string.nav_open,
+                R.string.nav_close);
         // pass the Open and Close toggle for the drawer layout listener
-        // to toggle the button
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
         // to make the Navigation drawer icon always appear on the action bar
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setSubtitle(R.string.sub_main);
         }
 
         // implement navigation view to use nav_drawer buttons for navigation in the app
@@ -84,22 +128,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         Intent myIntent;
-
+        // define action for each navigation drawer button
         try {
             if (id == R.id.nav_account) {
                 myIntent = new Intent(getApplicationContext(), AccountActivity.class);
+                startActivity(myIntent);
             } else if (id == R.id.nav_cart) {
                 myIntent = new Intent(getApplicationContext(), CartActivity.class);
+                startActivity(myIntent);
             } else if (id == R.id.nav_orders) {
                 myIntent = new Intent(getApplicationContext(), OrdersActivity.class);
+                startActivity(myIntent);
             } else if (id == R.id.nav_about) {
                 myIntent = new Intent(getApplicationContext(), AboutActivity.class);
+                startActivity(myIntent);
             } else if (id == R.id.nav_logout) {
                 myIntent = new Intent(getApplicationContext(), LoginActivity.class);
-            } else {
+                startActivity(myIntent);
+            } else if (id == R.id.nav_dark_mode) {
+                int mode = AppCompatDelegate.getDefaultNightMode();
+                if ((mode == MODE_NIGHT_NO) || (mode == MODE_NIGHT_UNSPECIFIED)) {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                }
+            }
+            else {
                 throw new Exception("Invalid item clicked!");
             }
-            startActivity(myIntent);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -122,6 +178,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Button btn = (Button) v;
         Toast.makeText(MainActivity.this, "Clicked button " + btn.getId(), Toast.LENGTH_SHORT).show();
     };
-
-
 }
