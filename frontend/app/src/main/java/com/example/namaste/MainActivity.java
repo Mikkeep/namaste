@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity
         // set the size of the individual buttons
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(1000, 600);
 
-
         // placeholder restaurant name array for buttons (replace with results of backend query)
         String[] restNames = new String[]{
                 "Bob's Burgers",

@@ -17,6 +17,9 @@
     <string name="login_forgot_pw">Forgot password?</string>
     <string name="cancel">Cancel</string>
 
+    <!-- Account activity layout texts -->
+    <string name="account_user_suffix">profile</string>
+
     <!-- About body texts -->
     <string name="about_body_text">
         NAMASTE is an application for ordering meals from the best restaurants in Oulu, Finland.\n( ͡° ͜ʖ ͡°)
