@@ -1,11 +1,14 @@
 package com.example.namaste;
 
+import android.os.StrictMode;
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+
+import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -14,7 +17,11 @@ import okhttp3.Response;
 
 public class OkHttpPostRequest {
 
-    public String doPostRequest(String username, String password, String reqType) {
+    public Response doPostRequest(String username, String password, String reqType) {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                .permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         Log.d("OKHTTP3", "POST function called");
         OkHttpClient client = new OkHttpClient();
         MediaType JSON = MediaType.parse("application/json;charset=utf-8");
@@ -34,15 +41,18 @@ public class OkHttpPostRequest {
                 .post(body)
                 .build();
         Log.d("response iss:", newReq.toString());
+        Response response = null;
         try {
-            Response response = client.newCall(newReq).execute();
+            response = client.newCall(newReq).execute();
             Log.d("OKHTTP3", "Request done, got the response");
             Log.d("OKHTTP3", response.body().string());
-            return response.toString();
+            Headers headers = response.headers();
+            String sId = headers.get("Set-Cookie");
+            Log.d("Set-cookie: ", sId);
         } catch (IOException e) {
             Log.d("OKHTTP3", "Exception while doing request.");
             e.printStackTrace();
-            return "error in post call";
         }
+        return response;
     }
 }

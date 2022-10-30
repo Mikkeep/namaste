@@ -7,7 +7,9 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -21,6 +23,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -29,13 +32,34 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+<<<<<<< HEAD
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
+=======
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
+
+>>>>>>> main
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String sessionId = getIntent().getStringExtra("EXTRA_SESSION_ID");
+        sessionId = sessionId.replace("session=", "");
+        sessionId = sessionId.replace("; HttpOnly; Path=/", "");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -50,6 +74,10 @@ public class MainActivity extends AppCompatActivity
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(1000, 600);
 
         // placeholder restaurant name array for buttons (replace with results of backend query)
+<<<<<<< HEAD
+=======
+        /*
+>>>>>>> main
         String[] restNames = new String[]{
                 "Bob's Burgers",
                 "Alice's Apples",
@@ -67,7 +95,11 @@ public class MainActivity extends AppCompatActivity
                 "Can I haz cheezburger?",
                 "Eat fast",
                 "You can't resist our balls"
+<<<<<<< HEAD
         };
+=======
+        }; */
+>>>>>>> main
         Integer[] restIcons = new Integer[]{
                 R.drawable.bobs_burgers,
                 R.drawable.alice_apple,
@@ -78,11 +110,46 @@ public class MainActivity extends AppCompatActivity
                 R.drawable.taco_ball
         };
 
+<<<<<<< HEAD
         // Add restaurant buttons in loop (replace this with foreach loop after backend req works)
         for (int i = 0; i < restNames.length; i++) {
             Button btn = new Button(this);
             btn.setId(i);
             Spannable span = new SpannableString(restNames[i]+"\n\""+restDesc[i]+"\"");
+=======
+        OkHttpGetRequest getReq = new OkHttpGetRequest();
+        Response response = getReq.doGetRequest(sessionId);
+
+        ArrayList<String> restNames = new ArrayList<String>();
+        ArrayList<String> restDesc = new ArrayList<String>();
+
+        JSONObject json = null;
+
+        try {
+            String responseData = response.body().string();
+            json = new JSONObject(responseData);
+            Log.d("response data is", String.valueOf(json));
+            JSONArray jsondata = json.getJSONArray("restaurants");
+            for(int i = 0; i < jsondata.length(); i++) {
+                JSONObject js = jsondata.getJSONObject(i);
+                restNames.add(js.getString("name"));
+                restDesc.add(js.getString("description"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("restaurant names now: ", restNames.toString());
+
+
+        // Add restaurant buttons in loop (replace this with foreach loop after backend req works)
+        for (int i = 0; i < restNames.size(); i++) {
+            Button btn = new Button(this);
+            btn.setId(i+1);
+            Spannable span = new SpannableString(restNames.get(i)+"\n\""+restDesc.get(i)+"\"");
+>>>>>>> main
             btn.setText(span);
             btn.setTextSize(20);
             btn.setLayoutParams(lp);
@@ -152,8 +219,12 @@ public class MainActivity extends AppCompatActivity
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
                 }
+<<<<<<< HEAD
             }
             else {
+=======
+            } else {
+>>>>>>> main
                 throw new Exception("Invalid item clicked!");
             }
         } catch (Exception ex) {
@@ -178,4 +249,8 @@ public class MainActivity extends AppCompatActivity
         Button btn = (Button) v;
         Toast.makeText(MainActivity.this, "Clicked button " + btn.getId(), Toast.LENGTH_SHORT).show();
     };
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
 }
