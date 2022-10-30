@@ -52,4 +52,9 @@ restaurants = {
         "description": "You can't resist our balls",
         "icon": "taco_ball",
     },
+    "r_8": {
+        "name": "VIP Lounge",
+        "description": "Restaurant reserved for high profile customers.",
+        "icon": "vip_lounge",
+    },
 }
