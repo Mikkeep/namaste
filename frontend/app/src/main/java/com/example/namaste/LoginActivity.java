@@ -2,6 +2,9 @@ package com.example.namaste;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -9,8 +12,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
 
+import okhttp3.Response;
+import okhttp3.internal.http2.Header;
+
 public class LoginActivity extends AppCompatActivity {
     // login activity
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String name = "nameKey";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +40,15 @@ public class LoginActivity extends AppCompatActivity {
             OkHttpPostRequest postReq = new OkHttpPostRequest();
             String msg = String.format("{\r\n    \"username\": \"%s\",\r\n    \"password\": \"%s\"\r\n}", username.getText().toString(), password.getText().toString());
             Log.d("message content: ", msg);
-            String response = postReq.doPostRequest(username.getText().toString(), password.getText().toString(), "login");
-            Log.d("response was: ", response);
-            if(response.contains("200")) {
+            Response response = postReq.doPostRequest(username.getText().toString(), password.getText().toString(), "login");
+            Log.d("response was: ", response.toString());
+            if(response.code() == 200) {
                 Toast.makeText(LoginActivity.this, "Login success!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
+                intent.putExtra("EXTRA_SESSION_ID", response.headers().get("Set-Cookie"));
                 startActivity(intent);
             } else {
-                Toast.makeText(LoginActivity.this, response, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "login failed.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -49,6 +58,5 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
-    // does the post request through emulators IP to 127.0.0.1
 
 }

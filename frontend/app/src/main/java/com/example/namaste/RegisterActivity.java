@@ -9,6 +9,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import okhttp3.Response;
+
 
 public class RegisterActivity extends AppCompatActivity {
     // activity for registering users
@@ -33,13 +35,13 @@ public class RegisterActivity extends AppCompatActivity {
             OkHttpPostRequest postReq = new OkHttpPostRequest();
             String msg = String.format("{\r\n    \"username\": \"%s\",\r\n    \"password\": \"%s\"\r\n}", username.getText().toString(), password.getText().toString());
             Log.d("message content: ", msg);
-            String response = postReq.doPostRequest(username.getText().toString(), password.getText().toString(), "register");
-            Log.d("response was: ", response);
-            if(response.contains("200")) {
-                Toast.makeText(RegisterActivity.this, "Login success!", Toast.LENGTH_SHORT).show();
+            Response response = postReq.doPostRequest(username.getText().toString(), password.getText().toString(), "register");
+            Log.d("response was: ", response.toString());
+            if (response.code() == 200) {
+                Toast.makeText(RegisterActivity.this, "Register successful!", Toast.LENGTH_SHORT).show();
                 finish();
             } else {
-                Toast.makeText(RegisterActivity.this, response, Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, "register failed", Toast.LENGTH_SHORT).show();
             }
         });
 
