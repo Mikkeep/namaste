@@ -120,7 +120,7 @@ class UserLogout(Resource):
 
 
 class UserAdmin(Resource):
-    """Check if the user is admin"""
+    """Check if the user is admin then elevate the specified user to admin"""
 
     def post(self):
         if not request.json:
