@@ -104,19 +104,27 @@ public class MainActivity extends AppCompatActivity
         ArrayList<String> restDesc = new ArrayList<String>();
 
         JSONObject json = null;
+
         try {
             String responseData = response.body().string();
             json = new JSONObject(responseData);
             Log.d("response data is", String.valueOf(json));
+            JSONArray jsondata = json.getJSONArray("restaurants");
+            for(int i = 0; i < jsondata.length(); i++) {
+                JSONObject js = jsondata.getJSONObject(i);
+                restNames.add(js.getString("name"));
+                restDesc.add(js.getString("description"));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+        Log.d("restaurant names now: ", restNames.toString());
+
 
         // Add restaurant buttons in loop (replace this with foreach loop after backend req works)
-        /*
         for (int i = 0; i < restNames.size(); i++) {
             Button btn = new Button(this);
             btn.setId(i+1);
@@ -136,7 +144,7 @@ public class MainActivity extends AppCompatActivity
             btn.setCompoundDrawablesWithIntrinsicBounds(null, null,
                     resizedIcon, null);
             restaurantBoard.addView(btn);
-        } */
+        }
 
         // drawer layout instance to toggle the menu icon to open
         // drawer and back button to close drawer
