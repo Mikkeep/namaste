@@ -5,8 +5,10 @@ Contains database models and click methods
 import click
 from flask.cli import with_appcontext
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
+import sqlalchemy
 from sqlalchemy.orm import relationship, backref
 from . import DB
+from .constants import restaurants, users
 
 
 class User(DB.Model):
@@ -39,6 +41,7 @@ class Restaurant(DB.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(100), unique=True, nullable=False)
     description = Column(String(200), unique=False, nullable=False)
+    icon = Column(String(200), unique=False, nullable=False)
 
     @staticmethod
     def json_schema():
@@ -151,28 +154,35 @@ def generate_test_data():
     """
     Generate content for database for testing
     """
-    print("Generating test users...")
-    p_0 = User(username="Admin", password="supersecurepassword123456", is_admin=True)
-    DB.session.add(p_0)
-    DB.session.commit()
-    p_1 = User(username="Bob", password="password", is_admin=False)
-    DB.session.add(p_1)
-    DB.session.commit()
-    print("Test generation of Users successful")
-    print("Generating restaurants...")
-    r_0 = Restaurant(
-        name="Bob's burgers", description="Almost as good as Alices aspargus'."
-    )
-    r_1 = Restaurant(
-        name="Alice's aspargus", description="Definitely better than Bob's burgers."
-    )
-    r_2 = Restaurant(
-        name="VIP Lounge", description="A secret VIP lounge for high class customers."
-    )
-    DB.session.add(r_0)
-    DB.session.add(r_1)
-    DB.session.add(r_2)
-    DB.session.commit()
-    print("Restaurants generation successful.")
-    print()
-    print("Test generation successful!")
+    try:
+        # users and restaurants are imported from constants
+        print()
+        print("Generating test users...")
+        for entry, value in users.items():
+            usr = User(
+                username=value.get("name"),
+                password=value.get("password"),
+                is_admin=value.get("is_admin"),
+            )
+            DB.session.add(usr)
+        DB.session.commit()
+
+        print("Test generation of Users successful")
+        print()
+        print("Generating restaurants...")
+
+        for entry, value in restaurants.items():
+            rest = Restaurant(
+                name=value.get("name"),
+                description=value.get("description"),
+                icon=value.get("icon"),
+            )
+            DB.session.add(rest)
+        DB.session.commit()
+        print("Restaurants generation successful.")
+        print()
+        print("Test generation successful!")
+    except sqlalchemy.exc.IntegrityError as e:
+        print("\nDatabase is already populated with testgen data!\n")
+        print("To use this command, delete existing database records and try again.\n")
+        print("Database testgen aborted!")
