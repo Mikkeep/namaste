@@ -45,10 +45,12 @@ public class OkHttpPostRequest {
         try {
             response = client.newCall(newReq).execute();
             Log.d("OKHTTP3", "Request done, got the response");
-            Log.d("OKHTTP3", response.body().string());
-            Headers headers = response.headers();
-            String sId = headers.get("Set-Cookie");
-            Log.d("Set-cookie: ", sId);
+            if(response.toString().contains("200")) {
+                Log.d("got here", "got here!");
+                Headers headers = response.headers();
+                String sId = headers.get("Set-Cookie");
+                Log.d("Set-cookie: ", sId);
+            }
         } catch (IOException e) {
             Log.d("OKHTTP3", "Exception while doing request.");
             e.printStackTrace();

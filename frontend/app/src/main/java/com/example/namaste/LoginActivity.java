@@ -41,8 +41,8 @@ public class LoginActivity extends AppCompatActivity {
             String msg = String.format("{\r\n    \"username\": \"%s\",\r\n    \"password\": \"%s\"\r\n}", username.getText().toString(), password.getText().toString());
             Log.d("message content: ", msg);
             Response response = postReq.doPostRequest(username.getText().toString(), password.getText().toString(), "login");
-            Log.d("response was: ", response.toString());
-            if(response.code() == 200) {
+            //Log.d("got here", "got here!");
+            if(response.toString().contains("200")) {
                 Toast.makeText(LoginActivity.this, "Login success!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
                 intent.putExtra("EXTRA_SESSION_ID", response.headers().get("Set-Cookie"));

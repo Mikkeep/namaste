@@ -7,9 +7,8 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -39,8 +38,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity
@@ -67,26 +64,6 @@ public class MainActivity extends AppCompatActivity
         // set the size of the individual buttons
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(1000, 600);
 
-        // placeholder restaurant name array for buttons (replace with results of backend query)
-        /*
-        String[] restNames = new String[]{
-                "Bob's Burgers",
-                "Alice's Apples",
-                "Peter's Pies",
-                "DjRonald's",
-                "HazBurger",
-                "Segway",
-                "Taco Ball"
-        };
-        String[] restDesc = new String[]{
-                "Best blocky burgers by big burger builder Bob!",
-                "My apples bring all boys to the yard",
-                "Mmm...pies",
-                "Who's McDonald?",
-                "Can I haz cheezburger?",
-                "Eat fast",
-                "You can't resist our balls"
-        }; */
         Integer[] restIcons = new Integer[]{
                 R.drawable.bobs_burgers,
                 R.drawable.alice_apple,
@@ -105,6 +82,7 @@ public class MainActivity extends AppCompatActivity
 
         JSONObject json = null;
 
+        // Getting restaurant data from backend
         try {
             String responseData = response.body().string();
             json = new JSONObject(responseData);
