@@ -17,12 +17,17 @@ class GetUsers(Resource):
     def get(self):
         command = "SELECT * FROM user"
         users = fetch_items(command)
-        print(users)
+
+        resp = {}
+        for i, user in enumerate(users):
+            resp[i] = {}
+            for key in user:
+                resp[i][key] = user[key]
 
         if users == None:
             return Response(status=404, response=json.dumps("Users not found!"))
         else:
-            return Response(status=200, response=json.dumps(users))
+            return Response(status=200, response=json.dumps(resp))
 
 
 class UserLogin(Resource):
