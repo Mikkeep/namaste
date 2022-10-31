@@ -143,40 +143,23 @@ class UserAdminElevate(Resource):
                 response=json.dumps("Request content type must be JSON"),
             )
 
-        try:
-            validate(
-                request.json,
-                User.json_schema(),
-                format_checker=draft7_format_checker,
-            )
-        except ValidationError:
-            return Response(status=400, response=json.dumps("Invalid JSON"))
+        if check_request_json(request):
+            return check_request_json(request)
 
         #admin_id = session["id"]
-        admin_username = request.json.get("username")
-
-        command = f"SELECT * FROM user WHERE username = '{admin_username}'"
-        admin = fetch_item(command)
-
-        if admin["is_admin"] is False:
-            return Response(status=403, response=json.dumps("Unauthorized admin elevation."))
+        if check_if_user_admin(request):
+            return check_if_user_admin(request)
 
         username = request.json.get("command")
 
         if not username:
             return Response(status=401, response=json.dumps("No username provided!"))
 
-        try:
-            db = get_db()
-            db.execute(
-                f"UPDATE user SET is_admin = 'True' WHERE username = '{username}'"
-            )
-            db.commit()
-            db.close
-        except IntegrityError as e:
-            return Response(status=400, response=json.dumps("Something went wrong."))
+        success = user_admin_modify(True, username)
+        if success:
+            return user_admin_modify
 
-     
+
 class UserAdminDelevate(Resource):
     """Check if the user is admin then demote the specified user from admin"""
 
@@ -186,36 +169,57 @@ class UserAdminDelevate(Resource):
                 status=415,
                 response=json.dumps("Request content type must be JSON"),
             )
-
-        try:
-            validate(
-                request.json,
-                User.json_schema(),
-                format_checker=draft7_format_checker,
-            )
-        except ValidationError:
-            return Response(status=400, response=json.dumps("Invalid JSON"))
+    
+        if check_request_json(request):
+            return check_request_json(request)
 
         #admin_id = session["id"]
-        admin_username = request.json.get("username")
-
-        command = f"SELECT * FROM user WHERE username = '{admin_username}'"
-        admin = fetch_item(command)
-
-        if admin["is_admin"] is False:
-            return Response(status=403, response=json.dumps("Unauthorized admin elevation."))
+        if check_if_user_admin(request):
+            return check_if_user_admin(request)
 
         username = request.json.get("command")
 
         if not username:
             return Response(status=401, response=json.dumps("No username provided!"))
 
-        try:
-            db = get_db()
-            db.execute(
-                f"UPDATE user SET is_admin = 'False' WHERE username = '{username}'"
-            )
-            db.commit()
-            db.close
-        except IntegrityError as e:
-            return Response(status=400, response=json.dumps("Something went wrong."))
+        success = user_admin_modify(False, username)
+        if success:
+            return user_admin_modify
+
+
+def user_admin_modify(statement, username):
+    """Modify is_admin property in the database
+    statement: boolean True or False
+    username: name of the user to modify"""
+    try:
+        db = get_db()
+        db.execute(
+            f"UPDATE user SET is_admin = '{statement}' WHERE username = '{username}'"
+        )
+        db.commit()
+        db.close
+    except IntegrityError as e:
+        return Response(status=400, response=json.dumps("Something went wrong."))
+
+
+def check_if_user_admin(request):
+    """Check whether requesting user is an admin. No password required."""
+    admin_username = request.json.get("username")
+
+    command = f"SELECT * FROM user WHERE username = '{admin_username}'"
+    admin = fetch_item(command)
+
+    if admin["is_admin"] is False:
+        return Response(status=403, response=json.dumps("Unauthorized user."))
+
+
+def check_request_json(request):
+    """Check if the request json is of proper schema"""
+    try:
+        validate(
+            request.json,
+            User.json_schema(),
+            format_checker=draft7_format_checker,
+        )
+    except ValidationError:
+        return Response(status=400, response=json.dumps("Invalid JSON"))
