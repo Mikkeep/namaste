@@ -70,6 +70,18 @@ pip install -r backend\requirements.txt
 
 ***
 
+### Testing
+
+**For Linux/MacOS**
+
+Run test.sh in this directory
+
+```shell
+$ ./test.sh
+```
+
+***
+
 ### FAQ
 
 <br>
