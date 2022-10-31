@@ -28,6 +28,17 @@ $ source backend/env/bin/activate
 $ pip install -r backend/requirements.txt
 ```
 
+**For Windows**
+
+```shell
+C:\> backend\env\Scripts\activate.bat
+```
+
+```shell
+pip install -r backend\requirements.txt
+```
+
+
 ---
 
 **Export Flask environment variable**
@@ -56,16 +67,6 @@ $ flask --app backend testgen
 
 ```shell
 $ flask run
-```
-
-**For Windows**
-
-```shell
-C:\> backend\env\Scripts\activate.bat
-```
-
-```shell
-pip install -r backend\requirements.txt
 ```
 
 ***
