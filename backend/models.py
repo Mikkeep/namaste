@@ -8,7 +8,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 import sqlalchemy
 from sqlalchemy.orm import relationship, backref
 from . import DB
-from .constants import restaurants, users
+from .constants import restaurants, users, items
 
 
 class User(DB.Model):
@@ -96,12 +96,12 @@ class Order(DB.Model):
     __tablename__ = "order"
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("user.id"))
-    restaurant_id = Column(Integer, ForeignKey("restaurant.id"))
+    rest_id = Column(Integer, ForeignKey("restaurant.id"))
     description = Column(String(2000), nullable=False)
 
     user = relationship("User", backref=backref("user", cascade="all, delete-orphan"))
     restaurant = relationship(
-        "Restaurant", backref=backref("restaurant", cascade="all, delete-orphan")
+        "Restaurant", backref=backref("restaurants_item", cascade="all, delete-orphan")
     )
 
     @staticmethod
@@ -125,7 +125,11 @@ class Item(DB.Model):
 
     __tablename__ = "item"
     id = Column(Integer, primary_key=True)
-    name = Column(String(100), unique=True, nullable=False)
+    name = Column(String(100), unique=False, nullable=False)
+    restaurant_id = Column(Integer, ForeignKey("restaurant.id"))
+    restaurant = relationship(
+        "Restaurant", backref=backref("restaurant", cascade="all, delete-orphan")
+    )
 
     @staticmethod
     def json_schema():
@@ -183,6 +187,18 @@ def generate_test_data():
         print("Restaurants generation successful.")
         print()
         print("Test generation successful!")
+        print()
+        print("Generating items for restaurants...")
+        for entry, value in items.items():
+            item = Item(
+                name=value.get("name"),
+                restaurant_id=value.get("id"),
+            )
+            DB.session.add(item)
+        DB.session.commit()
+
+        print("Test generation of items successful")
+        print()
     except sqlalchemy.exc.IntegrityError as e:
         print("\nDatabase is already populated with testgen data!\n")
         print("To use this command, delete existing database records and try again.\n")
