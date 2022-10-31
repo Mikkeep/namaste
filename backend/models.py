@@ -29,6 +29,7 @@ class User(DB.Model):
         props = schema["properties"] = {}
         props["username"] = {"description": "username", "type": "string"}
         props["password"] = {"description": "password", "type": "string"}
+        props["command"] = {"description": "command", "type": "string"}
         return schema
 
 
