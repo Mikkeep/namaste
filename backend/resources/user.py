@@ -143,7 +143,7 @@ class UserAdmin(Resource):
         command = f"SELECT * FROM users WHERE username = '{admin_name}"
         admin = fetch_item(command)
 
-        if admin.is_admin == False:
+        if admin.is_admin is False:
             return Response(status=403, response=json.dumps("Unauthorized admin elevation."))
 
         username = request.json.get("username")
