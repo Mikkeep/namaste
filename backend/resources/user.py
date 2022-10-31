@@ -6,7 +6,7 @@ from flask_restful import Resource
 
 from backend.models import User
 from ..constants import JSON
-from ..utils import fetch_item, fetch_items, get_db
+from ..utils import ensure_login, fetch_item, fetch_items, get_db
 from sqlite3 import IntegrityError
 from jsonschema import validate, ValidationError, draft7_format_checker
 
@@ -130,6 +130,7 @@ class UserRegister(Resource):
 class UserLogout(Resource):
     """Method for logging user out"""
 
+    @ensure_login
     def post(self):
         """Post method functionality for logging user out"""
         session["id"] = None
@@ -141,6 +142,7 @@ class UserLogout(Resource):
 class UserAdminElevate(Resource):
     """Check if the user is admin then elevate the specified user to admin"""
 
+    @ensure_login
     def post(self):
         if not request.json:
             return Response(
@@ -158,7 +160,7 @@ class UserAdminElevate(Resource):
         username = request.json.get("command")
 
         if not username:
-            return Response(status=401, response=json.dumps("No username provided!"))
+            return Response(status=401, response=json.dumps("No command provided!"))
 
         success = user_admin_modify(True, username)
         if success:
@@ -168,6 +170,7 @@ class UserAdminElevate(Resource):
 class UserAdminDelevate(Resource):
     """Check if the user is admin then demote the specified user from admin"""
 
+    @ensure_login
     def post(self):
         if not request.json:
             return Response(
@@ -185,7 +188,7 @@ class UserAdminDelevate(Resource):
         username = request.json.get("command")
 
         if not username:
-            return Response(status=401, response=json.dumps("No username provided!"))
+            return Response(status=401, response=json.dumps("No command provided!"))
 
         success = user_admin_modify(False, username)
         if success:
