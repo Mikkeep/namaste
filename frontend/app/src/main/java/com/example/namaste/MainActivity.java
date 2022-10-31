@@ -31,6 +31,11 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+<<<<<<< HEAD
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener{
+
+=======
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,6 +48,7 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+>>>>>>> main
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
@@ -64,6 +70,36 @@ public class MainActivity extends AppCompatActivity
         // set the size of the individual buttons
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(1000, 600);
 
+<<<<<<< HEAD
+=======
+        // placeholder restaurant name array for buttons (replace with results of backend query)
+<<<<<<< HEAD
+=======
+        /*
+>>>>>>> main
+        String[] restNames = new String[]{
+                "Bob's Burgers",
+                "Alice's Apples",
+                "Peter's Pies",
+                "DjRonald's",
+                "HazBurger",
+                "Segway",
+                "Taco Ball"
+        };
+        String[] restDesc = new String[]{
+                "Best blocky burgers by big burger builder Bob!",
+                "My apples bring all boys to the yard",
+                "Mmm...pies",
+                "Who's McDonald?",
+                "Can I haz cheezburger?",
+                "Eat fast",
+                "You can't resist our balls"
+<<<<<<< HEAD
+        };
+=======
+        }; */
+>>>>>>> main
+>>>>>>> 3c4a432b31ca481e0509c863e6838cf25e75a716
         Integer[] restIcons = new Integer[]{
                 R.drawable.bobs_burgers,
                 R.drawable.alice_apple,
@@ -74,6 +110,13 @@ public class MainActivity extends AppCompatActivity
                 R.drawable.taco_ball
         };
 
+<<<<<<< HEAD
+        // Add restaurant buttons in loop (replace this with foreach loop after backend req works)
+        for (int i = 0; i < restNames.length; i++) {
+            Button btn = new Button(this);
+            btn.setId(i);
+            Spannable span = new SpannableString(restNames[i]+"\n\""+restDesc[i]+"\"");
+=======
         OkHttpGetRequest getReq = new OkHttpGetRequest();
         Response response = getReq.doGetRequest(sessionId);
 
@@ -107,6 +150,7 @@ public class MainActivity extends AppCompatActivity
             Button btn = new Button(this);
             btn.setId(i+1);
             Spannable span = new SpannableString(restNames.get(i)+"\n\""+restDesc.get(i)+"\"");
+>>>>>>> main
             btn.setText(span);
             btn.setTextSize(20);
             btn.setLayoutParams(lp);
@@ -176,7 +220,12 @@ public class MainActivity extends AppCompatActivity
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
                 }
+<<<<<<< HEAD
+            }
+            else {
+=======
             } else {
+>>>>>>> main
                 throw new Exception("Invalid item clicked!");
             }
         } catch (Exception ex) {
@@ -201,5 +250,8 @@ public class MainActivity extends AppCompatActivity
         Button btn = (Button) v;
         Toast.makeText(MainActivity.this, "Clicked button " + btn.getId(), Toast.LENGTH_SHORT).show();
     };
+<<<<<<< HEAD
+=======
 
+>>>>>>> main
 }
