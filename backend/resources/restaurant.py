@@ -5,7 +5,7 @@ from flask import Response, session
 from flask_restful import Resource
 from .. import DB
 
-from backend.models import Restaurant
+from backend.models import Restaurant, Item
 from ..constants import JSON, HIDDEN_RESTAURANT
 from ..utils import ensure_login
 
@@ -27,10 +27,17 @@ class Restaurants(Resource):
 
         listing = []
         for restaurant in restaurants:
+            items = (
+                DB.session.query(Item).filter(Item.restaurant_id == restaurant.id).all()
+            )
+            products = []
+            if items:
+                products = [item.name for item in items]
             info = {
                 "id": restaurant.id,
                 "name": restaurant.name,
                 "description": restaurant.description,
+                "products": products,
             }
             listing.append(info)
 
