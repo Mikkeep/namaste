@@ -192,7 +192,7 @@ def generate_test_data():
         for entry, value in items.items():
             item = Item(
                 name=value.get("name"),
-                restaurant_id=value.get("id"),
+                restaurant_id=value.get("res_id"),
             )
             DB.session.add(item)
         DB.session.commit()

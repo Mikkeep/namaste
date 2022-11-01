@@ -62,35 +62,37 @@ restaurants = {
 items = {
     "i_1": {
         "name": "Burger",
-        "id": "1",
+        "res_id": "1",
     },
     "i_1.2": {
         "name": "Khay-burger",
-        "id": "1",
+        "res_id": "1",
     },
     "i_2": {
         "name": "Apple",
-        "id": "2",
+        "res_id": "2",
     },
     "i_3": {
         "name": "Pie",
-        "id": "3",
+        "res_id": "3",
     },
     "i_4": {
         "name": "Burger",
-        "id": "4",
+        "res_id": "4",
     },
     "i_5": {
         "name": "HazBurger",
-        "id": "5",
+        "res_id": "5",
     },
-    "i_6": {"name": "Subway sandwich", "id": "6"},
+    "i_6": {
+        "name": "Subway sandwich", 
+        "res_id": "6"},
     "i_7": {
         "name": "Meatballs",
-        "id": "7",
+        "res_id": "7",
     },
     "i_8": {
-        "name": "Glenfiddich",
-        "id": "8",
+        "name": "Glenfres_iddich",
+        "res_id": "8",
     },
 }
