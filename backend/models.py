@@ -89,7 +89,7 @@ class Orderitem(DB.Model):
 '''
 
 
-class Order(DB.Model):
+class Orders(DB.Model):
     """
     Order database model
     """

@@ -5,9 +5,9 @@ from flask import Response, session, request
 from flask_restful import Resource
 from .. import DB
 
-from backend.models import Restaurant, Item
+from backend.models import Restaurant, Item, Orders
 from ..constants import JSON, HIDDEN_RESTAURANT
-from ..utils import ensure_login, fetch_items, get_db, ensure_json
+from ..utils import ensure_login, fetch_item, fetch_items, get_db, ensure_json
 
 
 class Restaurants(Resource):
@@ -96,11 +96,21 @@ class Order(Resource):
         user_id = session["id"]
         db = get_db()
         
-        command = f"SELECT * FROM orders WHERE user_id = '{user_id}'"
-        orders = fetch_items(command)
+        command = f"SELECT * FROM orders WHERE user.user_id = '{user_id}'"
+        orders = (DB.session.query(Orders).filter(Orders.user_id == user_id).all())
 
         resp = {}
-        for i, order in orders:
+        for i, order in enumerate(orders):
             resp[i] = {}
-            
+            item_name = (DB.session.query(Item.name, Restaurant.name).filter(Item.id == order.item_id, Restaurant.id == order.rest_id))
+            print(item_name)
+            input()
+            resp[i]["item_name"] = item_name
+            #resp[i]["rest_name"] = rest_name
+            resp[i]["amount"] = order.amount
+            resp[i]["description"] = order.description
 
+        if resp == None:
+            return Response(status=200, response=json.dumps("Orders not found!"))
+        else:
+            return Response(status=200, response=json.dumps(resp, separators=(",", ": ")))
