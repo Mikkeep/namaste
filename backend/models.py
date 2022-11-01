@@ -97,11 +97,17 @@ class Order(DB.Model):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("user.id"))
     rest_id = Column(Integer, ForeignKey("restaurant.id"))
+    item_id = Column(Integer, ForeignKey("item.id"))
+    amount = Column(Integer)
     description = Column(String(2000), nullable=False)
 
     user = relationship("User", backref=backref("user", cascade="all, delete-orphan"))
     restaurant = relationship(
         "Restaurant", backref=backref("restaurants_item", cascade="all, delete-orphan")
+    )
+    item = relationship(
+        "Item",
+        backref=backref("orderitems", cascade="all, delete-orphan"),
     )
 
     @staticmethod
@@ -109,7 +115,7 @@ class Order(DB.Model):
         """
         Define the JSON schema for database model
         """
-        schema = {"type": "object", "required": ["name", "description"]}
+        schema = {"type": "object", "required": ["user_id", "rest_id", "item_id", "amount", "description"]}
         props = schema["properties"] = {}
         props["description"] = {
             "description": "Description of the order",
