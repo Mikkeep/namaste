@@ -53,10 +53,10 @@ class Restaurant(DB.Model):
         props["description"] = {"description": "description", "type": "string"}
         return schema
 
-
+'''
 class Orderitem(DB.Model):
     """
-    Order items database model
+    #Order items database model
     """
 
     __tablename__ = "orderitem"
@@ -76,7 +76,7 @@ class Orderitem(DB.Model):
     @staticmethod
     def json_schema():
         """
-        Define the JSON schema for database model
+        #Define the JSON schema for database model
         """
         schema = {"type": "object", "required": ["name", "amount"]}
         props = schema["properties"] = {}
@@ -86,6 +86,7 @@ class Orderitem(DB.Model):
             "type": "number",
         }
         return schema
+'''
 
 
 class Order(DB.Model):
@@ -93,7 +94,7 @@ class Order(DB.Model):
     Order database model
     """
 
-    __tablename__ = "order"
+    __tablename__ = "orders"
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("user.id"))
     rest_id = Column(Integer, ForeignKey("restaurant.id"))

@@ -7,7 +7,7 @@ from .. import DB
 
 from backend.models import Restaurant, Item
 from ..constants import JSON, HIDDEN_RESTAURANT
-from ..utils import ensure_login, get_db
+from ..utils import ensure_login, fetch_items, get_db, ensure_json
 
 
 class Restaurants(Resource):
@@ -64,29 +64,43 @@ class Order(Resource):
         Order needs to be in json format with the following values
         user_id: id of the user making the order, gotten with session
         rest_id: id of the restaurant being ordered from
-        item_id: id of the item being ordered
-        description: I have no idea what this is, but I'm guessing the location of the order"""
-        if not request.json:
-            return Response(
-                status=415,
-                response=json.dumps("Request content type must be JSON"),
-            )
+        item_id: id(s) of the item being ordered in a list
+        amount: amount of food being ordered in a list
+        description: the location of the order"""
+        
+        if ensure_json(request):
+            return ensure_json(request)
         
         try:
             user_id = session["id"] # Should this be possible to be done without logging in, to allow uses order for other users?
             rest_id = request.json.get("rest_id")
             item_id = request.json.get("item_id")
+            amount = request.json.get("amount")
             desc = request.json.get("description")
         except:
             return Response(status=400, response=json.dumps("Invalid JSON"))
-
+        print(user_id, rest_id, item_id, amount, desc)
         db = get_db()
-        try:
-            db.execute(
-                "INSERT INTO order (user_id, rest_id, description) VALUES (?, ?, ?)",
-                (user_id, rest_id, desc)
-            )
-            db.commit()
-            db.execute(
-                "INSER INTO "
-            )
+        db.execute(
+            "INSERT INTO orders (user_id, rest_id, item_id, amount, description) VALUES (?, ?, ?, ?, ?)",
+            (user_id, rest_id, item_id, amount, desc),
+        )
+        db.commit()
+        db.close()
+        
+        return Response(status=200, response=json.dumps("Order complete!"))
+
+    @ensure_login
+    def get(self):
+        """Get all the orders made by session ID"""
+        user_id = session["id"]
+        db = get_db()
+        
+        command = f"SELECT * FROM orders WHERE user_id = '{user_id}'"
+        orders = fetch_items(command)
+
+        resp = {}
+        for i, order in orders:
+            resp[i] = {}
+            
+
