@@ -47,9 +47,17 @@ class Restaurants(Resource):
 
         return Response(
             status=200,
-            response=json.dumps(data, indent=4, separators=(",", ": ")),
+            response=json.dumps(data, separators=(",", ": ")),
             mimetype=JSON,
         )
 
+    def post(self):
+        pass
+
+
+class Order(Resource):
+    """Make an order to a restaurant"""
+    
+    @ensure_login
     def post(self):
         pass
