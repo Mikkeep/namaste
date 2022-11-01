@@ -28,11 +28,16 @@
             android:exported="false"
             android:parentActivityName=".MainActivity"/>
         <activity
+            android:name=".RestaurantActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"/>
+        <activity
             android:name=".AboutActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".MainActivity"
+            android:launchMode="singleTask"
             android:exported="true"/>
         <activity
             android:name=".LoginActivity"

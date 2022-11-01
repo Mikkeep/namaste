@@ -34,6 +34,7 @@ import com.google.android.material.navigation.NavigationView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.security.AccessController;
 import java.util.ArrayList;
 
 import okhttp3.Response;
@@ -73,7 +74,8 @@ public class MainActivity extends AppCompatActivity
                 R.drawable.djronald,
                 R.drawable.hasburger,
                 R.drawable.segway,
-                R.drawable.taco_ball
+                R.drawable.taco_ball,
+                R.drawable.vip_lounge
         };
 
         OkHttpGetRequest getReq = new OkHttpGetRequest();
@@ -81,6 +83,7 @@ public class MainActivity extends AppCompatActivity
 
         ArrayList<String> restNames = new ArrayList<String>();
         ArrayList<String> restDesc = new ArrayList<String>();
+        ArrayList<JSONArray> restItems = new ArrayList<JSONArray>();
 
         JSONObject json = null;
 
@@ -94,6 +97,7 @@ public class MainActivity extends AppCompatActivity
                 JSONObject js = jsondata.getJSONObject(i);
                 restNames.add(js.getString("name"));
                 restDesc.add(js.getString("description"));
+                restItems.add(js.getJSONArray("products"));
             }
         } catch (IOException | JSONException e) {
             e.printStackTrace();
@@ -201,6 +205,10 @@ public class MainActivity extends AppCompatActivity
         // check which button was clicked
         Button btn = (Button) v;
         Toast.makeText(MainActivity.this, "Clicked button " + btn.getId(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, RestaurantActivity.class);
+        intent.putExtra("id", btn.getId());
+        intent.putExtra("name", btn.getText());
+        startActivity(intent);
     };
 
 }

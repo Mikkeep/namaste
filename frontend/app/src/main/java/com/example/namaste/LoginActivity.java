@@ -14,9 +14,6 @@ import android.content.Intent;
 import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
-    // login activity
-    public static final String MyPREFERENCES = "MyPrefs" ;
-    public static final String name = "nameKey";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
