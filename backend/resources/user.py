@@ -27,7 +27,7 @@ class GetUsers(Resource):
                 resp[i][key] = user[key]
 
         if users == None:
-            return Response(status=404, response=json.dumps("Users not found!"))
+            return Response(status=200, response=json.dumps("Users not found!"))
         else:
             return Response(status=200, response=json.dumps(resp, indent=4, separators=(",", ": ")))
 
