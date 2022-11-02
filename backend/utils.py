@@ -56,3 +56,11 @@ def ensure_login(func):
         return exec
 
     return server
+
+
+def ensure_json(request):
+    if not request.json:
+        return Response(
+            status=415,
+            response=json.dumps("Request content type must be JSON"),
+        )
