@@ -30,9 +30,9 @@ class Restaurants(Resource):
             items = (
                 DB.session.query(Item).filter(Item.restaurant_id == restaurant.id).all()
             )
-            products = []
-            if items:
-                products = [item.name for item in items]
+            for item in items:
+                products = {"name": item.name, "id": item.id}
+
             info = {
                 "id": restaurant.id,
                 "name": restaurant.name,
