@@ -6,6 +6,8 @@ import json
 import sqlite3
 from flask import g, session, Response
 from .constants import DB_LOCATION
+from .models import User
+from . import DB
 
 
 def get_db():
@@ -51,6 +53,27 @@ def ensure_login(func):
             return Response(
                 status=401,
                 response=json.dumps("Please log in."),
+            )
+        exec = func(*args, **kwargs)
+        return exec
+
+    return server
+
+
+def ensure_admin(func):
+    """Checks session["id"] state before resource access"""
+
+    def server(*args, **kwargs):
+        if session.get("id") == None:
+            return Response(
+                status=401,
+                response=json.dumps("Please log in."),
+            )
+        user_priv = DB.session.query(User).filter(User.id == session["id"]).first()
+        if not user_priv.is_admin:
+            return Response(
+                status=403,
+                response=json.dumps("This is an admin API call!"),
             )
         exec = func(*args, **kwargs)
         return exec
