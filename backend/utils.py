@@ -5,6 +5,7 @@ Utility methods for Flask
 import json
 import sqlite3
 from flask import g, session, Response
+from jsonschema import draft7_format_checker, validate, ValidationError
 from .constants import DB_LOCATION
 from .models import User
 from . import DB
@@ -87,3 +88,20 @@ def ensure_json(request):
             status=415,
             response=json.dumps("Request content type must be JSON"),
         )
+
+
+def check_request_json(request, DB_model):
+    """Check if the request json is of proper schema"""
+    if not request.json:
+        return Response(
+            status=415,
+            response=json.dumps("Request content type must be JSON"),
+        )
+    try:
+        validate(
+            request.json,
+            DB_model.json_schema(),
+            format_checker=draft7_format_checker,
+        )
+    except ValidationError:
+        return Response(status=400, response=json.dumps("Invalid JSON"))
