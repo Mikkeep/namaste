@@ -17,7 +17,7 @@ import okhttp3.Response;
 
 public class OkHttpPostRequest {
 
-    public Response doPostRequest(String username, String password, String reqType) {
+    public Response doPostRequest(String one, String two, String three, String four, String five, String reqType) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                 .permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -26,14 +26,27 @@ public class OkHttpPostRequest {
         OkHttpClient client = new OkHttpClient();
         MediaType JSON = MediaType.parse("application/json;charset=utf-8");
         JSONObject data = new JSONObject();
-        String url = "http://10.0.2.2:5000/api/users/" + reqType;
-        try {
-            data.put("username", username);
-            data.put("password", password);
-        } catch (JSONException e) {
-            Log.d("OKHTTP3", "JSON exception");
-            e.printStackTrace();
+        String url = "http://10.0.2.2:5000/api/" + reqType;
+
+        if(reqType.contains("users")) {
+            try {
+                data.put("username", one);
+                data.put("password", two);
+            } catch (JSONException e) {
+                Log.d("OKHTTP3", "JSON exception");
+                e.printStackTrace();
+            }
         }
+
+        if(reqType.contains("order")) {
+            data.put("user_id", one);
+            data.put("rest_id", two);
+            data.put("item_id", three);
+            data.put("amount", four);
+            data.put("description", five);
+        }
+
+
         RequestBody body = RequestBody.create(JSON, data.toString());
         Log.d("OKHTTP3", "Request body created.");
         Request newReq = new Request.Builder()

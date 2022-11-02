@@ -53,10 +53,10 @@ class Restaurant(DB.Model):
         props["description"] = {"description": "description", "type": "string"}
         return schema
 
-
+'''
 class Orderitem(DB.Model):
     """
-    Order items database model
+    #Order items database model
     """
 
     __tablename__ = "orderitem"
@@ -76,7 +76,7 @@ class Orderitem(DB.Model):
     @staticmethod
     def json_schema():
         """
-        Define the JSON schema for database model
+        #Define the JSON schema for database model
         """
         schema = {"type": "object", "required": ["name", "amount"]}
         props = schema["properties"] = {}
@@ -86,22 +86,29 @@ class Orderitem(DB.Model):
             "type": "number",
         }
         return schema
+'''
 
 
-class Order(DB.Model):
+class Orders(DB.Model):
     """
     Order database model
     """
 
-    __tablename__ = "order"
+    __tablename__ = "orders"
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("user.id"))
     rest_id = Column(Integer, ForeignKey("restaurant.id"))
+    item_id = Column(Integer, ForeignKey("item.id"))
+    amount = Column(Integer)
     description = Column(String(2000), nullable=False)
 
     user = relationship("User", backref=backref("user", cascade="all, delete-orphan"))
     restaurant = relationship(
         "Restaurant", backref=backref("restaurants_item", cascade="all, delete-orphan")
+    )
+    item = relationship(
+        "Item",
+        backref=backref("orderitems", cascade="all, delete-orphan"),
     )
 
     @staticmethod
@@ -109,7 +116,7 @@ class Order(DB.Model):
         """
         Define the JSON schema for database model
         """
-        schema = {"type": "object", "required": ["name", "description"]}
+        schema = {"type": "object", "required": ["user_id", "rest_id", "item_id", "amount", "description"]}
         props = schema["properties"] = {}
         props["description"] = {
             "description": "Description of the order",
@@ -192,7 +199,7 @@ def generate_test_data():
         for entry, value in items.items():
             item = Item(
                 name=value.get("name"),
-                restaurant_id=value.get("id"),
+                restaurant_id=value.get("res_id"),
             )
             DB.session.add(item)
         DB.session.commit()

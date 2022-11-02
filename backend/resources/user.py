@@ -1,6 +1,8 @@
 """ Methods for Users """
 
 import json
+from string import ascii_letters, digits
+from unicodedata import digit
 from flask import request, Response, session
 from flask_restful import Resource
 
@@ -25,9 +27,9 @@ class GetUsers(Resource):
                 resp[i][key] = user[key]
 
         if users == None:
-            return Response(status=404, response=json.dumps("Users not found!"))
+            return Response(status=200, response=json.dumps("Users not found!"))
         else:
-            return Response(status=200, response=json.dumps(resp))
+            return Response(status=200, response=json.dumps(resp, indent=4, separators=(",", ": ")))
 
 
 class UserLogin(Resource):
@@ -114,6 +116,9 @@ class UserRegister(Resource):
         if not password:
             return Response(status=401, response=json.dumps("No password provided!"))
 
+        #if check_register_password(password):
+        #    return check_register_password(password)
+
         try:
             db.execute(
                 "INSERT INTO user (username, password, is_admin) VALUES (?, ?, ?)",
@@ -153,14 +158,13 @@ class UserAdminElevate(Resource):
         if check_request_json(request):
             return check_request_json(request)
 
-        #admin_id = session["id"]
         if check_if_user_admin(request):
             return check_if_user_admin(request)
 
         username = request.json.get("command")
 
         if not username:
-            return Response(status=401, response=json.dumps("No command provided!"))
+            return Response(status=401, response=json.dumps("No command field provided!"))
 
         success = user_admin_modify(True, username)
         if success:
@@ -181,14 +185,13 @@ class UserAdminDelevate(Resource):
         if check_request_json(request):
             return check_request_json(request)
 
-        #admin_id = session["id"]
-        if check_if_user_admin(request):
-            return check_if_user_admin(request)
+        #if check_if_user_admin(request):
+        #    return check_if_user_admin(request)
 
         username = request.json.get("command")
 
         if not username:
-            return Response(status=401, response=json.dumps("No command provided!"))
+            return Response(status=401, response=json.dumps("No command field provided!"))
 
         success = user_admin_modify(False, username)
         if success:
@@ -212,12 +215,12 @@ def user_admin_modify(statement, username):
 
 def check_if_user_admin(request):
     """Check whether requesting user is an admin. No password required."""
-    admin_username = request.json.get("username")
+    admin_id = session["id"]
 
-    command = f"SELECT * FROM user WHERE username = '{admin_username}'"
+    command = f"SELECT is_admin FROM user WHERE id = '{admin_id}'"
     admin = fetch_item(command)
 
-    if admin["is_admin"] is False:
+    if admin is False:
         return Response(status=403, response=json.dumps("Unauthorized user."))
 
 
@@ -231,3 +234,12 @@ def check_request_json(request):
         )
     except ValidationError:
         return Response(status=400, response=json.dumps("Invalid JSON"))
+
+
+def check_register_password(password: str):
+    if len(password) > 3 and len(password) < 9:
+        for letter in password:
+            if letter not in ascii_letters or letter not in digits:
+                return Response(status=400, response=json.dumps("Password can only contain letters and numbers!"))
+    else:
+        return Response(status=400, response=json.dumps("Password length is between 4-8!"))

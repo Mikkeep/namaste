@@ -36,7 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
             String msg = String.format("{\r\n    \"username\": \"%s\",\r\n    \"password\": \"%s\"\r\n}", username.getText().toString(), password.getText().toString());
             Log.d("message content: ", msg);
 
-            Response response = postReq.doPostRequest(username.getText().toString(), password.getText().toString(), "register");
+            Response response = postReq.doPostRequest(username.getText().toString(), password.getText().toString(), null, null, null, "users/register");
             Log.d("response was: ", response.toString());
             if (response.toString().contains("200")) {
                 Toast.makeText(RegisterActivity.this, "Register successful!", Toast.LENGTH_SHORT).show();

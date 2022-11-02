@@ -34,6 +34,7 @@ import com.google.android.material.navigation.NavigationView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.security.AccessController;
 import java.util.ArrayList;
 
 import okhttp3.Response;
@@ -46,12 +47,18 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    ArrayList<String> restNames = new ArrayList<String>();
+    ArrayList<String> restDesc = new ArrayList<String>();
+    ArrayList<JSONArray> restItems = new ArrayList<JSONArray>();
+    String sId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         String sessionId = getIntent().getStringExtra("EXTRA_SESSION_ID");
         sessionId = sessionId.replace("session=", "");
         sessionId = sessionId.replace("; HttpOnly; Path=/", "");
+
+        String sId = sessionId;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -73,14 +80,12 @@ public class MainActivity extends AppCompatActivity
                 R.drawable.djronald,
                 R.drawable.hasburger,
                 R.drawable.segway,
-                R.drawable.taco_ball
+                R.drawable.taco_ball,
+                R.drawable.vip_lounge
         };
 
         OkHttpGetRequest getReq = new OkHttpGetRequest();
         Response response = getReq.doGetRequest(sessionId);
-
-        ArrayList<String> restNames = new ArrayList<String>();
-        ArrayList<String> restDesc = new ArrayList<String>();
 
         JSONObject json = null;
 
@@ -94,6 +99,7 @@ public class MainActivity extends AppCompatActivity
                 JSONObject js = jsondata.getJSONObject(i);
                 restNames.add(js.getString("name"));
                 restDesc.add(js.getString("description"));
+                restItems.add(js.getJSONArray("products"));
             }
         } catch (IOException | JSONException e) {
             e.printStackTrace();
@@ -101,13 +107,13 @@ public class MainActivity extends AppCompatActivity
 
         Log.d("restaurant names now: ", restNames.toString());
 
-
         // Add restaurant buttons in loop (replace this with foreach loop after backend req works)
         for (int i = 0; i < restNames.size(); i++) {
             Button btn = new Button(this);
             btn.setId(i+1);
             Spannable span = new SpannableString(restNames.get(i)+"\n\""+restDesc.get(i)+"\"");
             btn.setText(span);
+            btn.setContentDescription(restItems.get(i).toString());
             btn.setTextSize(20);
             btn.setLayoutParams(lp);
             btn.setOnClickListener(restaurantButtonListener);
@@ -197,10 +203,18 @@ public class MainActivity extends AppCompatActivity
     }
 
     // click listener for the restaurant buttons
-    private final View.OnClickListener restaurantButtonListener = v -> {
+    private final View.OnClickListener restaurantButtonListener = (v) -> {
         // check which button was clicked
         Button btn = (Button) v;
+        Integer id = btn.getId();
         Toast.makeText(MainActivity.this, "Clicked button " + btn.getId(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, RestaurantActivity.class);
+        intent.putExtra("id", id);
+        intent.putExtra("name", btn.getText());
+        intent.putExtra("userId", sId);
+        Log.d("name of restaurant", btn.getText().toString());
+        intent.putExtra("products", restItems.get(id-1).toString());
+        startActivity(intent);
     };
 
 }

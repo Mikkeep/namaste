@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-black"
         android:text="@string/register"
-        android:textColor="@color/white"
+        android:textColor="@color/default_light_blue"
         android:textSize="40sp"
         android:shadowColor="#000000"
         android:shadowDx="1.5"
