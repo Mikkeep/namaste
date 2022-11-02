@@ -47,12 +47,18 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    ArrayList<String> restNames = new ArrayList<String>();
+    ArrayList<String> restDesc = new ArrayList<String>();
+    ArrayList<JSONArray> restItems = new ArrayList<JSONArray>();
+    String sId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         String sessionId = getIntent().getStringExtra("EXTRA_SESSION_ID");
         sessionId = sessionId.replace("session=", "");
         sessionId = sessionId.replace("; HttpOnly; Path=/", "");
+
+        String sId = sessionId;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -81,10 +87,6 @@ public class MainActivity extends AppCompatActivity
         OkHttpGetRequest getReq = new OkHttpGetRequest();
         Response response = getReq.doGetRequest(sessionId);
 
-        ArrayList<String> restNames = new ArrayList<String>();
-        ArrayList<String> restDesc = new ArrayList<String>();
-        ArrayList<JSONArray> restItems = new ArrayList<JSONArray>();
-
         JSONObject json = null;
 
         // Getting restaurant data from backend
@@ -105,13 +107,13 @@ public class MainActivity extends AppCompatActivity
 
         Log.d("restaurant names now: ", restNames.toString());
 
-
         // Add restaurant buttons in loop (replace this with foreach loop after backend req works)
         for (int i = 0; i < restNames.size(); i++) {
             Button btn = new Button(this);
             btn.setId(i+1);
             Spannable span = new SpannableString(restNames.get(i)+"\n\""+restDesc.get(i)+"\"");
             btn.setText(span);
+            btn.setContentDescription(restItems.get(i).toString());
             btn.setTextSize(20);
             btn.setLayoutParams(lp);
             btn.setOnClickListener(restaurantButtonListener);
@@ -201,13 +203,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     // click listener for the restaurant buttons
-    private final View.OnClickListener restaurantButtonListener = v -> {
+    private final View.OnClickListener restaurantButtonListener = (v) -> {
         // check which button was clicked
         Button btn = (Button) v;
+        Integer id = btn.getId();
         Toast.makeText(MainActivity.this, "Clicked button " + btn.getId(), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, RestaurantActivity.class);
-        intent.putExtra("id", btn.getId());
+        intent.putExtra("id", id);
         intent.putExtra("name", btn.getText());
+        intent.putExtra("userId", sId);
+        Log.d("name of restaurant", btn.getText().toString());
+        intent.putExtra("products", restItems.get(id-1).toString());
         startActivity(intent);
     };
 

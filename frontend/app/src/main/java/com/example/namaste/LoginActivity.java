@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
             OkHttpPostRequest postReq = new OkHttpPostRequest();
             String msg = String.format("{\r\n    \"username\": \"%s\",\r\n    \"password\": \"%s\"\r\n}", username.getText().toString(), password.getText().toString());
             Log.d("message content: ", msg);
-            Response response = postReq.doPostRequest(username.getText().toString(), password.getText().toString(), "login");
+            Response response = postReq.doPostRequest(username.getText().toString(), password.getText().toString(), null, null, null, "users/login");
             //Log.d("got here", "got here!");
             if(response.toString().contains("200")) {
                 Toast.makeText(LoginActivity.this, "Login success!", Toast.LENGTH_SHORT).show();
