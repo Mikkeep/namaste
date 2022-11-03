@@ -21,7 +21,7 @@ from sqlite3 import IntegrityError
 class GetUsers(Resource):
     """Get a json of all users"""
 
-    # @ensure_admin
+    @ensure_admin
     def get(self):
         command = "SELECT * FROM user"
         users = fetch_items(command)
