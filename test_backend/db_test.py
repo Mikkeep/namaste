@@ -179,7 +179,7 @@ class TestUser(object):
     def test_access_register(self, db_handle):
         data = {"username": "testibob1", "password": "bobword"}
         resp = db_handle.post("/api/users/register/", json=data, headers={
-    'Content-type':'application/json', 
+    'Content-type':'application/json',
     'Accept':'application/json'
     })
         assert resp.status_code == 200
