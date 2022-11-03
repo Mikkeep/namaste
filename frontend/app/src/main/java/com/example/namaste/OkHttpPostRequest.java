@@ -33,26 +33,45 @@ public class OkHttpPostRequest {
                 data.put("username", one);
                 data.put("password", two);
             } catch (JSONException e) {
-                Log.d("OKHTTP3", "JSON exception");
+                Log.d("OKHTTP3", "JSON exception in login.");
                 e.printStackTrace();
             }
         }
 
         if(reqType.contains("order")) {
-            data.put("user_id", one);
-            data.put("rest_id", two);
-            data.put("item_id", three);
-            data.put("amount", four);
-            data.put("description", five);
+            try {
+                data.put("rest_id", one);
+                data.put("item_id", two);
+                data.put("amount", three);
+                data.put("description", four);
+            } catch (JSONException e) {
+                Log.d("OKTTP3", "JSON exception in order.");
+                e.printStackTrace();
+            }
         }
 
+        Log.d("data to be posted:", data.toString());
 
         RequestBody body = RequestBody.create(JSON, data.toString());
         Log.d("OKHTTP3", "Request body created.");
-        Request newReq = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
+        Log.d("OKHTTP3 RB:", body.toString());
+
+        Request newReq = null;
+        if(reqType.contains("users")) {
+            newReq = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+        }
+
+        if(reqType.contains("order")) {
+            newReq = new Request.Builder()
+                    .addHeader("Cookie", "session=" + five)
+                    .url(url)
+                    .post(body)
+                    .build();
+        }
+
         Log.d("response iss:", newReq.toString());
         Response response = null;
         try {
@@ -60,14 +79,17 @@ public class OkHttpPostRequest {
             Log.d("OKHTTP3", "Request done, got the response");
             if(response.toString().contains("200")) {
                 Log.d("got here", "got here!");
-                Headers headers = response.headers();
-                String sId = headers.get("Set-Cookie");
-                Log.d("Set-cookie: ", sId);
+                if(reqType.contains("users")) {
+                    Headers headers = response.headers();
+                    String sId = headers.get("Set-Cookie");
+                    Log.d("Set-cookie: ", sId);
+                }
             }
         } catch (IOException e) {
             Log.d("OKHTTP3", "Exception while doing request.");
             e.printStackTrace();
         }
+        Log.d("OKHTTP3", String.valueOf(response));
         return response;
     }
 }

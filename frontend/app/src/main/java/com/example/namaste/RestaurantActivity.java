@@ -1,18 +1,18 @@
 package com.example.namaste;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -54,6 +54,7 @@ public class RestaurantActivity extends AppCompatActivity {
 
 
         for(int i = 0; i < productList.size(); i++) {
+            Log.d("item id", String.valueOf(i));
             Button btn = new Button(this);
             btn.setId(i+1);
             btn.setText(productList.get(i));
@@ -71,11 +72,14 @@ public class RestaurantActivity extends AppCompatActivity {
         Button btn = (Button) v;
         String btnId = String.valueOf(btn.getId());
         // userid, restaurantid, itemid, amount, location
-        Response response = postReq.doPostRequest(sId, rId, btnId, "1", "Oulu", "/restaurant/order/");
+        Log.d("data to be sent: ", rId + btnId + "1" + "Oulu" + sId);
+        Response response = postReq.doPostRequest(rId, btnId, "1", "Oulu", sId, "restaurant/order/");
+
         if(response.toString().contains("200")) {
             Toast.makeText(RestaurantActivity.this, "Order sent to cart!", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(RestaurantActivity.this, "Error in order.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RestaurantActivity.this, "Clicked button " + btn.getId(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(RestaurantActivity.this, "Error in order.", Toast.LENGTH_SHORT).show();
         }
     };
 }
