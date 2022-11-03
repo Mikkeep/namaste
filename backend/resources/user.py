@@ -21,7 +21,7 @@ from sqlite3 import IntegrityError
 class GetUsers(Resource):
     """Get a json of all users"""
 
-    @ensure_admin
+    # @ensure_admin
     def get(self):
         command = "SELECT * FROM user"
         users = fetch_items(command)
@@ -47,15 +47,10 @@ class UserLogin(Resource):
         """Post method functionality for single user"""
 
         if check_request_json(request, User):
-            return check_request_json(request)
+            return check_request_json(request, User)
 
         username = request.json.get("username")
         password = request.json.get("password")
-
-        if not username:
-            return Response(status=401, response=json.dumps("No username provided!"))
-        if not password:
-            return Response(status=401, response=json.dumps("No password provided!"))
 
         command = "SELECT * FROM user WHERE username = '%s' AND password = '%s'" % (
             username,
@@ -65,7 +60,7 @@ class UserLogin(Resource):
 
         if user is None:
             return Response(
-                status=404,
+                status=401,
                 response=json.dumps("User does not exist!"),
             )
 
@@ -95,11 +90,6 @@ class UserRegister(Resource):
         password = request.json.get("password")
 
         db = get_db()
-
-        if not username:
-            return Response(status=401, response=json.dumps("No username provided!"))
-        if not password:
-            return Response(status=401, response=json.dumps("No password provided!"))
 
         try:
             db.execute(
