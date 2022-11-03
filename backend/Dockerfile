@@ -7,6 +7,7 @@ COPY . backend/
 
 ENV FLASK_APP=backend
 ENV FLASK_RUN_HOST=0.0.0.0
+ENV FLASK_DEBUG=True
 
 COPY requirements.txt ./
 COPY start_flask.sh ./
