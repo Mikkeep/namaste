@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity
     ArrayList<String> restNames = new ArrayList<String>();
     ArrayList<String> restDesc = new ArrayList<String>();
     ArrayList<JSONObject> restItems = new ArrayList<JSONObject>();
-    ArrayList<String> sId = new ArrayList<>();
+    String sId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity
         sessionId = sessionId.replace("session=", "");
         sessionId = sessionId.replace("; HttpOnly; Path=/", "");
 
-        sId.add(sessionId);
+        sId = sessionId;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra("id", id);
         intent.putExtra("name", btn.getText());
         intent.putExtra("userId", sId);
-        intent.putExtra("userId", sId.get(0));
+        intent.putExtra("userId", sId);
         Log.d("name of restaurant", btn.getText().toString());
         intent.putExtra("products", restItems.get(id - 1).toString());
         startActivity(intent);
