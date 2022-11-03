@@ -10,7 +10,7 @@ from ..constants import JSON, HIDDEN_RESTAURANT
 from ..utils import (
     ensure_login,
     get_db,
-    ensure_json,
+    check_request_json,
 )
 
 
@@ -72,8 +72,8 @@ class Order(Resource):
         amount: amount of food being ordered in a list
         description: the location of the order"""
 
-        if ensure_json(request):
-            return ensure_json(request)
+        if check_request_json(request):
+            return check_request_json(request)
 
         try:
             user_id = session[
@@ -96,27 +96,25 @@ class Order(Resource):
 
         return Response(status=200, response=json.dumps("Order complete!"))
 
+
     @ensure_login
     def get(self):
         """Get all the orders made by session ID"""
         user_id = session["id"]
-        db = get_db()
 
-        command = f"SELECT * FROM orders WHERE user.user_id = '{user_id}'"
         orders = DB.session.query(Orders).filter(Orders.user_id == user_id).all()
 
         resp = {}
         for i, order in enumerate(orders):
             resp[i] = {}
-            item_name = DB.session.query(Item.name, Restaurant.name).filter(
+            query_result = DB.session.query(Item, Restaurant).filter(
                 Item.id == order.item_id, Restaurant.id == order.rest_id
             )
-            print(item_name)
-            input()
-            resp[i]["item_name"] = item_name
-            # resp[i]["rest_name"] = rest_name
-            resp[i]["amount"] = order.amount
-            resp[i]["description"] = order.description
+            for item, restaurant in query_result:
+                resp[i]["item_name"] = item.name
+                resp[i]["rest_name"] = restaurant.name
+                resp[i]["amount"] = order.amount
+                resp[i]["description"] = order.description
 
         if resp == None:
             return Response(status=200, response=json.dumps("Orders not found!"))
