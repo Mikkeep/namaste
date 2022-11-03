@@ -82,14 +82,6 @@ def ensure_admin(func):
     return server
 
 
-def ensure_json(request):
-    if not request.json:
-        return Response(
-            status=415,
-            response=json.dumps("Request content type must be JSON"),
-        )
-
-
 def check_request_json(request, DB_model):
     """Check if the request json is of proper schema"""
     if not request.json:

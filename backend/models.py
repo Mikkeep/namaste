@@ -53,41 +53,6 @@ class Restaurant(DB.Model):
         props["description"] = {"description": "description", "type": "string"}
         return schema
 
-'''
-class Orderitem(DB.Model):
-    """
-    #Order items database model
-    """
-
-    __tablename__ = "orderitem"
-    id = Column(Integer, ForeignKey("order.id"), primary_key=True)
-    ingredient_id = Column(Integer, ForeignKey("item.id"), primary_key=True)
-    amount = Column(Integer)
-
-    order_rel = relationship(
-        "Order",
-        backref=backref("orderitems", cascade="all, delete-orphan"),
-    )
-    item = relationship(
-        "Item",
-        backref=backref("orderitems", cascade="all, delete-orphan"),
-    )
-
-    @staticmethod
-    def json_schema():
-        """
-        #Define the JSON schema for database model
-        """
-        schema = {"type": "object", "required": ["name", "amount"]}
-        props = schema["properties"] = {}
-        props["name"] = {"description": "Ingredients ID", "type": "string"}
-        props["amount"] = {
-            "description": "Amount of item",
-            "type": "number",
-        }
-        return schema
-'''
-
 
 class Orders(DB.Model):
     """
