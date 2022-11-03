@@ -54,11 +54,14 @@ public class RestaurantActivity extends AppCompatActivity {
 
 
         for(int i = 0; i < productList.size(); i++) {
+            if(productList.get(i).contains("id:")) {
+                continue;
+            }
             Log.d("item id", String.valueOf(i));
             Button btn = new Button(this);
             btn.setId(i+1);
-            btn.setText(productList.get(i));
-            btn.setTextSize(40);
+            btn.setText(productList.get(i).replace("{name:", ""));
+            btn.setTextSize(35);
             btn.setLayoutParams(mp);
             btn.setOnClickListener(menuButtonListener);
             menuBoard.addView(btn);
