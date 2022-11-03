@@ -8,7 +8,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -38,18 +37,17 @@ import java.security.AccessController;
 import java.util.ArrayList;
 
 import okhttp3.Response;
+
 import org.json.JSONException;
 
 import java.io.IOException;
 
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
     private ActionBarDrawerToggle actionBarDrawerToggle;
     ArrayList<String> restNames = new ArrayList<String>();
     ArrayList<String> restDesc = new ArrayList<String>();
-    ArrayList<JSONArray> restItems = new ArrayList<JSONArray>();
+    ArrayList<JSONObject> restItems = new ArrayList<JSONObject>();
     ArrayList<String> sId = new ArrayList<>();
 
     @Override
@@ -57,7 +55,6 @@ public class MainActivity extends AppCompatActivity
         String sessionId = getIntent().getStringExtra("EXTRA_SESSION_ID");
         sessionId = sessionId.replace("session=", "");
         sessionId = sessionId.replace("; HttpOnly; Path=/", "");
-
 
         sId.add(sessionId);
 
@@ -71,9 +68,9 @@ public class MainActivity extends AppCompatActivity
         // importing linearlayout for buttons
         // nested in a scrollview for scrolling
         LinearLayout restaurantBoard = findViewById(R.id.l1);
+
         // set the size of the individual buttons
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(1000, 600);
-
         Integer[] restIcons = new Integer[]{
                 R.drawable.bobs_burgers,
                 R.drawable.alice_apple,
@@ -87,38 +84,37 @@ public class MainActivity extends AppCompatActivity
 
         OkHttpGetRequest getReq = new OkHttpGetRequest();
         Response response = getReq.doGetRequest(sessionId);
-
         JSONObject json = null;
 
         // Getting restaurant data from backend
         try {
             String responseData = response.body().string();
             json = new JSONObject(responseData);
-            Log.d("response data is", String.valueOf(json));
             JSONArray jsondata = json.getJSONArray("restaurants");
-            for(int i = 0; i < jsondata.length(); i++) {
+            Log.d("asd jsondata", jsondata.toString());
+            for (int i = 0; i < jsondata.length(); i++) {
                 JSONObject js = jsondata.getJSONObject(i);
                 restNames.add(js.getString("name"));
                 restDesc.add(js.getString("description"));
-                restItems.add(js.getJSONArray("products"));
+                restItems.add(js.getJSONObject("products"));
             }
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
 
+        Log.d("restaurant items now", restItems.toString());
         Log.d("restaurant names now: ", restNames.toString());
 
-        // Add restaurant buttons in loop (replace this with foreach loop after backend req works)
+
         for (int i = 0; i < restNames.size(); i++) {
             Button btn = new Button(this);
-            btn.setId(i+1);
-            Spannable span = new SpannableString(restNames.get(i)+"\n\""+restDesc.get(i)+"\"");
+            btn.setId(i + 1);
+            Spannable span = new SpannableString(restNames.get(i) + "\n\"" + restDesc.get(i) + "\"");
             btn.setText(span);
             btn.setContentDescription(restItems.get(i).toString());
             btn.setTextSize(20);
             btn.setLayoutParams(lp);
             btn.setOnClickListener(restaurantButtonListener);
-
             // set the icon for button
             Drawable icon = ResourcesCompat.getDrawable(getApplicationContext().getResources(),
                     restIcons[i], null);
@@ -142,13 +138,11 @@ public class MainActivity extends AppCompatActivity
         // pass the Open and Close toggle for the drawer layout listener
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-
         // to make the Navigation drawer icon always appear on the action bar
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setSubtitle(R.string.sub_main);
         }
-
         // implement navigation view to use nav_drawer buttons for navigation in the app
         NavigationView navigationView = findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -183,7 +177,6 @@ public class MainActivity extends AppCompatActivity
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
                 }
-
             } else {
                 throw new Exception("Invalid item clicked!");
             }
@@ -196,7 +189,6 @@ public class MainActivity extends AppCompatActivity
     // click listener for the navigation drawer toggle
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
@@ -212,10 +204,10 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(this, RestaurantActivity.class);
         intent.putExtra("id", id);
         intent.putExtra("name", btn.getText());
+        intent.putExtra("userId", sId);
         intent.putExtra("userId", sId.get(0));
         Log.d("name of restaurant", btn.getText().toString());
-        intent.putExtra("products", restItems.get(id-1).toString());
+        intent.putExtra("products", restItems.get(id - 1).toString());
         startActivity(intent);
     };
-
 }
