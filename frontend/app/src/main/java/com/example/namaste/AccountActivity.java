@@ -19,7 +19,8 @@ public class AccountActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         TextView userText = findViewById(R.id.account_profile_username);
-        String username = "homers"; // replace with get request
+
+        String username = this.getIntent().getStringExtra("USERNAME");
         String usernameSuffixed;
         if (username.endsWith("s")) {
              usernameSuffixed = username.concat("' ");

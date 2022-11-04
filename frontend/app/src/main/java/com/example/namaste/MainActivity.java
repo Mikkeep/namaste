@@ -45,18 +45,20 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    String username;
     ArrayList<String> restNames = new ArrayList<String>();
     ArrayList<String> restDesc = new ArrayList<String>();
     ArrayList<JSONObject> restItems = new ArrayList<JSONObject>();
-    ArrayList<String> sId = new ArrayList<>();
+    String sId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String userName = getIntent().getStringExtra("USERNAME");
         String sessionId = getIntent().getStringExtra("EXTRA_SESSION_ID");
         sessionId = sessionId.replace("session=", "");
         sessionId = sessionId.replace("; HttpOnly; Path=/", "");
-
-        sId.add(sessionId);
+        sId = sessionId;
+        username = userName;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -157,6 +159,7 @@ public class MainActivity extends AppCompatActivity
         try {
             if (id == R.id.nav_account) {
                 myIntent = new Intent(getApplicationContext(), AccountActivity.class);
+                myIntent.putExtra("USERNAME", username);
                 startActivity(myIntent);
             } else if (id == R.id.nav_cart) {
                 myIntent = new Intent(getApplicationContext(), CartActivity.class);
@@ -168,8 +171,15 @@ public class MainActivity extends AppCompatActivity
                 myIntent = new Intent(getApplicationContext(), AboutActivity.class);
                 startActivity(myIntent);
             } else if (id == R.id.nav_logout) {
-                myIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(myIntent);
+                OkHttpPostRequest logoutPostReq = new OkHttpPostRequest();
+                Response resp = logoutPostReq.doPostRequest(null, null, null, null, sId, "users/logout");
+                if (resp.toString().contains("200")){
+                    resp.close();
+                    myIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(myIntent);
+                    Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
+                }
+                resp.close();
             } else if (id == R.id.nav_dark_mode) {
                 int mode = AppCompatDelegate.getDefaultNightMode();
                 if ((mode == MODE_NIGHT_NO) || (mode == MODE_NIGHT_UNSPECIFIED)) {
@@ -205,7 +215,6 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra("id", id);
         intent.putExtra("name", btn.getText());
         intent.putExtra("userId", sId);
-        intent.putExtra("userId", sId.get(0));
         Log.d("name of restaurant", btn.getText().toString());
         intent.putExtra("products", restItems.get(id - 1).toString());
         startActivity(intent);
