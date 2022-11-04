@@ -41,6 +41,8 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Login success!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
                 intent.putExtra("EXTRA_SESSION_ID", response.headers().get("Set-Cookie"));
+                intent.putExtra("USERNAME", username.getText().toString());
+                Log.d("login_username", intent.getStringExtra("USERNAME"));
                 startActivity(intent);
             } else {
                 Toast.makeText(LoginActivity.this, "login failed.", Toast.LENGTH_SHORT).show();
