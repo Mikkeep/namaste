@@ -5,30 +5,38 @@
 
     <item
         android:id="@+id/nav_account"
-        android:title="My Account"/>
+        android:title="My Account"
+        android:visible="true"
+        />
 
     <item
-        android:id="@+id/nav_cart"
-        android:title="Cart" />
+        android:id="@+id/nav_admin"
+        android:title="Admin Panel"
+        android:visible="false"
+        />
 
     <item
         android:id="@+id/nav_orders"
-        android:title="Orders" />
+        android:title="Orders"
+        android:visible="true"
+        />
 
     <item
         android:id="@+id/nav_about"
-        android:title="About" />
+        android:title="About"
+        android:visible="true"
+        />
 
     <item
         android:id="@+id/nav_dark_mode"
         android:title="Toggle dark mode"
+        android:visible="true"
         />
 
     <item
         android:id="@+id/nav_logout"
-        android:title="Log out" />
-
-
-
+        android:title="Log out"
+        android:visible="true"
+        />
 
 </menu>

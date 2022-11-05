@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/admin_panel"
+    tools:context=".AdminActivity"
+    tools:ignore="HardcodedText">
+
+    <EditText
+        android:id="@+id/re_enter_admin_field"
+        android:layout_width="300dp"
+        android:layout_height="47dp"
+        android:layout_below="@id/admin_panel"
+        android:layout_marginBottom="404dp"
+        android:autofillHints="Re-enter admin password"
+        android:background="@drawable/text_border"
+        android:fontFamily="sans-serif-black"
+        android:gravity="center"
+        android:hint="@string/admin_re_enter"
+        android:inputType="textPassword"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/adminBtn"
+        android:layout_width="209dp"
+        android:layout_height="63dp"
+        android:layout_marginBottom="332dp"
+        android:shadowColor="#000000"
+        android:shadowDx="1.5"
+        android:shadowDy="1.3"
+        android:shadowRadius="1.6"
+        android:text="Enter"
+        app:backgroundTint="@android:color/holo_green_light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

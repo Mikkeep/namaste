@@ -5,7 +5,7 @@
     <string name="sub_main">Main Menu</string>
     <string name="sub_account">My Account</string>
     <string name="sub_orders">Orders</string>
-    <string name="sub_cart">Cart</string>
+    <string name="sub_admin">Admin Panel</string>
     <string name="sub_about">About</string>
 
     <!-- Login and register label texts -->
@@ -16,6 +16,8 @@
     <string name="login_log_in">Log In</string>
     <string name="login_forgot_pw">Forgot password?</string>
     <string name="cancel">Cancel</string>
+
+    <string name="admin_re_enter">Re-enter admin password</string>
 
     <!-- Account activity layout texts -->
     <string name="account_user_suffix">profile</string>
