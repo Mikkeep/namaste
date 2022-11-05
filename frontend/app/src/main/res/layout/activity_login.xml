@@ -50,7 +50,7 @@
         android:layout_width="256dp"
         android:layout_height="47dp"
         android:layout_marginBottom="484dp"
-        android:autofillHints="Enter Username"
+        android:autofillHints="Enter username"
         android:background="@drawable/text_border"
         android:fontFamily="sans-serif-black"
         android:hint="@string/username"

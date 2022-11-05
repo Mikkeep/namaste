@@ -11,9 +11,12 @@ import android.widget.Toast;
 import android.content.Intent;
 
 
+import java.io.IOException;
+
 import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +44,15 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Login success!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
                 intent.putExtra("EXTRA_SESSION_ID", response.headers().get("Set-Cookie"));
+                try {
+                    //boolean isAdmin = response.body().toString().contains("isAdmin=true"); // Check if this is correct syntax after backend implementation
+                    boolean temp = username.getText().toString().equals("Admin"); // !!! REMOVE THIS LINE AFTER PROPER IMPLEMENTATION
+                    intent.putExtra("IS_ADMIN", temp); // Pass admin status to MainActivity
+                } catch (NullPointerException e){
+                    e.printStackTrace();
+                }
                 intent.putExtra("USERNAME", username.getText().toString());
-                Log.d("login_username", intent.getStringExtra("USERNAME"));
+                Log.d("intent extras", intent.getExtras().toString());
                 startActivity(intent);
             } else {
                 Toast.makeText(LoginActivity.this, "login failed.", Toast.LENGTH_SHORT).show();
