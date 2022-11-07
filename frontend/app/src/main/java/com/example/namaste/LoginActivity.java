@@ -11,7 +11,11 @@ import android.widget.Toast;
 import android.content.Intent;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.Objects;
 
 import okhttp3.Response;
 
@@ -44,11 +48,17 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Login success!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
                 intent.putExtra("EXTRA_SESSION_ID", response.headers().get("Set-Cookie"));
+                String sUsername;
+                boolean sIsAdmin;
+
                 try {
-                    //boolean isAdmin = response.body().toString().contains("isAdmin=true"); // Check if this is correct syntax after backend implementation
-                    boolean temp = username.getText().toString().equals("Admin"); // !!! REMOVE THIS LINE AFTER PROPER IMPLEMENTATION
-                    intent.putExtra("IS_ADMIN", temp); // Pass admin status to MainActivity
-                } catch (NullPointerException e){
+                    JSONObject bodyJson = new JSONObject(Objects.requireNonNull(response.body()).string());
+                    sUsername = bodyJson.getString("name");
+                    //sIsAdmin = bodyJson.getBoolean("isAdmin"); // !!! REMOVE THIS LINE AFTER PROPER IMPLEMENTATION
+                    boolean temp = username.getText().toString().equals("Admin");
+                    intent.putExtra("IS_ADMIN", temp);
+                    intent.putExtra("USERNAME", sUsername);
+                } catch (JSONException | IOException e) {
                     e.printStackTrace();
                 }
                 intent.putExtra("USERNAME", username.getText().toString());
