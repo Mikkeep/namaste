@@ -61,7 +61,6 @@ public class LoginActivity extends AppCompatActivity {
                 } catch (JSONException | IOException e) {
                     e.printStackTrace();
                 }
-                intent.putExtra("USERNAME", username.getText().toString());
                 Log.d("intent extras", intent.getExtras().toString());
                 startActivity(intent);
             } else {
