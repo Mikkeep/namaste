@@ -64,9 +64,7 @@ class UserLogin(Resource):
                 response=json.dumps("User does not exist!"),
             )
 
-        data = {
-            "name": user["username"],
-        }
+        data = {"name": user["username"], "is_admin": user["is_admin"]}
 
         session["id"] = user["id"]
 
