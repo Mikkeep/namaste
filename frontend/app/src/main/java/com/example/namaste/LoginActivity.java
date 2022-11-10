@@ -11,9 +11,16 @@ import android.widget.Toast;
 import android.content.Intent;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.Objects;
+
 import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +48,20 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Login success!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
                 intent.putExtra("EXTRA_SESSION_ID", response.headers().get("Set-Cookie"));
+                String sUsername;
+                boolean sIsAdmin;
+
+                try {
+                    JSONObject bodyJson = new JSONObject(Objects.requireNonNull(response.body()).string());
+                    sUsername = bodyJson.getString("name");
+                    //sIsAdmin = bodyJson.getBoolean("isAdmin"); // !!! REMOVE THIS LINE AFTER PROPER IMPLEMENTATION
+                    boolean temp = username.getText().toString().equals("Admin");
+                    intent.putExtra("IS_ADMIN", temp);
+                    intent.putExtra("USERNAME", sUsername);
+                } catch (JSONException | IOException e) {
+                    e.printStackTrace();
+                }
+                Log.d("intent extras", intent.getExtras().toString());
                 startActivity(intent);
             } else {
                 Toast.makeText(LoginActivity.this, "login failed.", Toast.LENGTH_SHORT).show();

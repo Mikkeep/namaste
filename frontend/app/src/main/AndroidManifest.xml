@@ -20,7 +20,7 @@
             android:exported="false"
             android:parentActivityName=".MainActivity"/>
         <activity
-            android:name=".CartActivity"
+            android:name=".AdminActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity"/>
         <activity

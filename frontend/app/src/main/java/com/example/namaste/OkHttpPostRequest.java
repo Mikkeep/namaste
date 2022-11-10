@@ -28,7 +28,7 @@ public class OkHttpPostRequest {
         JSONObject data = new JSONObject();
         String url = "http://10.0.2.2:5000/api/" + reqType;
 
-        if(reqType.contains("users")) {
+        if(reqType.contains("users/login") || reqType.contains("users/register")) {
             try {
                 data.put("username", one);
                 data.put("password", two);
@@ -45,7 +45,7 @@ public class OkHttpPostRequest {
                 data.put("amount", three);
                 data.put("description", four);
             } catch (JSONException e) {
-                Log.d("OKTTP3", "JSON exception in order.");
+                Log.d("OKHTTP3", "JSON exception in order.");
                 e.printStackTrace();
             }
         }
@@ -57,13 +57,22 @@ public class OkHttpPostRequest {
         Log.d("OKHTTP3 RB:", body.toString());
 
         Request newReq = null;
-        if(reqType.contains("users")) {
+        // Assemble headers and body for login/register request
+        if(reqType.contains("users/login") || reqType.contains("users/register")) {
             newReq = new Request.Builder()
                     .url(url)
                     .post(body)
                     .build();
         }
-
+        // Assemble headers and body for logout request
+        if(reqType.contains("users/logout")) {
+            newReq = new Request.Builder()
+                    .addHeader("Cookie", "session=" + five)
+                    .url(url)
+                    .post(body)
+                    .build();
+        }
+        // Assemble headers and body for order request
         if(reqType.contains("order")) {
             newReq = new Request.Builder()
                     .addHeader("Cookie", "session=" + five)
@@ -72,7 +81,7 @@ public class OkHttpPostRequest {
                     .build();
         }
 
-        Log.d("response iss:", newReq.toString());
+        Log.d("response is:", newReq.toString());
         Response response = null;
         try {
             response = client.newCall(newReq).execute();

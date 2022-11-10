@@ -6,13 +6,6 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -27,43 +20,63 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONException;
 
-import java.security.AccessController;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import okhttp3.Response;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    ArrayList<String> restNames = new ArrayList<String>();
-    ArrayList<String> restDesc = new ArrayList<String>();
-    ArrayList<JSONObject> restItems = new ArrayList<JSONObject>();
-    ArrayList<String> sId = new ArrayList<>();
+    private NavigationView navigationView;
+
+
+    ArrayList<String> restNames = new ArrayList<>();
+    ArrayList<String> restDesc = new ArrayList<>();
+    ArrayList<JSONObject> restItems = new ArrayList<>();
+    private String sId;
+    private boolean sIsAdmin;
+    private String sUsername;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sIsAdmin = getIntent().getBooleanExtra("IS_ADMIN", false);
+        navigationView.getMenu().findItem(R.id.nav_admin).setVisible(sIsAdmin);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // get username from extras set by LoginActivity
+        sUsername = getIntent().getStringExtra("USERNAME");
+
+        // get sessionId from extras set by LoginActivity
         String sessionId = getIntent().getStringExtra("EXTRA_SESSION_ID");
         sessionId = sessionId.replace("session=", "");
         sessionId = sessionId.replace("; HttpOnly; Path=/", "");
+        sId = sessionId;
 
-        sId.add(sessionId);
+        sIsAdmin = getIntent().getBooleanExtra("IS_ADMIN", false);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // init navigation drawer and action bar
-        DrawerLayout drawerLayout;
+        // init action bar
         ActionBar actionBar = getSupportActionBar();
+        DrawerLayout drawerLayout;
 
         // importing linearlayout for buttons
         // nested in a scrollview for scrolling
@@ -83,22 +96,22 @@ public class MainActivity extends AppCompatActivity
         };
 
         OkHttpGetRequest getReq = new OkHttpGetRequest();
-        Response response = getReq.doGetRequest(sessionId);
-        JSONObject json = null;
+        Response response = getReq.doGetRequest(sId);
+        JSONObject json;
 
         // Getting restaurant data from backend
         try {
             String responseData = response.body().string();
             json = new JSONObject(responseData);
-            JSONArray jsondata = json.getJSONArray("restaurants");
-            Log.d("asd jsondata", jsondata.toString());
-            for (int i = 0; i < jsondata.length(); i++) {
-                JSONObject js = jsondata.getJSONObject(i);
+            JSONArray jsonData = json.getJSONArray("restaurants");
+            Log.d("asd jsonData", jsonData.toString());
+            for (int i = 0; i < jsonData.length(); i++) {
+                JSONObject js = jsonData.getJSONObject(i);
                 restNames.add(js.getString("name"));
                 restDesc.add(js.getString("description"));
                 restItems.add(js.getJSONObject("products"));
             }
-        } catch (IOException | JSONException e) {
+        } catch (IOException | JSONException | NullPointerException e) {
             e.printStackTrace();
         }
 
@@ -106,6 +119,7 @@ public class MainActivity extends AppCompatActivity
         Log.d("restaurant names now: ", restNames.toString());
 
 
+        // Loop for getting restaurant items from request
         for (int i = 0; i < restNames.size(); i++) {
             Button btn = new Button(this);
             btn.setId(i + 1);
@@ -144,7 +158,9 @@ public class MainActivity extends AppCompatActivity
             actionBar.setSubtitle(R.string.sub_main);
         }
         // implement navigation view to use nav_drawer buttons for navigation in the app
-        NavigationView navigationView = findViewById(R.id.navigation_view);
+        navigationView = findViewById(R.id.navigation_view);
+        // show admin navigation item
+        navigationView.getMenu().findItem(R.id.nav_admin).setVisible(sIsAdmin);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -157,9 +173,10 @@ public class MainActivity extends AppCompatActivity
         try {
             if (id == R.id.nav_account) {
                 myIntent = new Intent(getApplicationContext(), AccountActivity.class);
+                myIntent.putExtra("USERNAME", sUsername);
                 startActivity(myIntent);
-            } else if (id == R.id.nav_cart) {
-                myIntent = new Intent(getApplicationContext(), CartActivity.class);
+            } else if (id == R.id.nav_admin) {
+                myIntent = new Intent(getApplicationContext(), AdminActivity.class);
                 startActivity(myIntent);
             } else if (id == R.id.nav_orders) {
                 myIntent = new Intent(getApplicationContext(), OrdersActivity.class);
@@ -168,8 +185,16 @@ public class MainActivity extends AppCompatActivity
                 myIntent = new Intent(getApplicationContext(), AboutActivity.class);
                 startActivity(myIntent);
             } else if (id == R.id.nav_logout) {
-                myIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(myIntent);
+                OkHttpPostRequest logoutPostReq = new OkHttpPostRequest();
+                Response resp = logoutPostReq.doPostRequest(null, null, null, null, sId, "users/logout");
+                if (resp.toString().contains("200")){
+                    resp.close();
+                    myIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(myIntent);
+                    this.finish();
+                    Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
+                }
+                resp.close();
             } else if (id == R.id.nav_dark_mode) {
                 int mode = AppCompatDelegate.getDefaultNightMode();
                 if ((mode == MODE_NIGHT_NO) || (mode == MODE_NIGHT_UNSPECIFIED)) {
@@ -205,7 +230,6 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra("id", id);
         intent.putExtra("name", btn.getText());
         intent.putExtra("userId", sId);
-        intent.putExtra("userId", sId.get(0));
         Log.d("name of restaurant", btn.getText().toString());
         intent.putExtra("products", restItems.get(id - 1).toString());
         startActivity(intent);

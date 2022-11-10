@@ -12,7 +12,6 @@
         android:layout_height="match_parent"
         android:gravity="top|center"
         android:text="@string/about_body_text"
-        android:textColor="@color/black"
         android:textSize="20sp"/>
 
     <androidx.appcompat.widget.AppCompatTextView
