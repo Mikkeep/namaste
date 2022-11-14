@@ -32,10 +32,7 @@ class GetUsers(Resource):
             for key in user:
                 resp[i][key] = user[key]
 
-        if users == None:
-            return Response(status=200, response=json.dumps("Users not found!"))
-        else:
-            return Response(
+        return Response(
                 status=200, response=json.dumps(resp, indent=4, separators=(",", ": "))
             )
 
@@ -171,18 +168,19 @@ def user_admin_modify(statement, username):
         db.close
     except IntegrityError as e:
         return Response(status=400, response=json.dumps("Something went wrong."))
-
+    return Response(status=200)
 
 def check_register_password(password: str):
     if len(password) > 3 and len(password) < 9:
         for letter in password:
-            if letter not in ascii_letters or letter not in digits:
+            if letter not in ascii_letters and letter not in digits:
                 return Response(
                     status=400,
                     response=json.dumps(
                         "Password can only contain letters and numbers!"
                     ),
                 )
+        return Response(status=200)
     else:
         return Response(
             status=400, response=json.dumps("Password length is between 4-8!")

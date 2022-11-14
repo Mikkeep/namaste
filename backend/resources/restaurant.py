@@ -30,6 +30,7 @@ class Restaurants(Resource):
             )
 
         listing = []
+        products = {}
         for restaurant in restaurants:
             items = (
                 DB.session.query(Item).filter(Item.restaurant_id == restaurant.id).all()
@@ -56,7 +57,7 @@ class Restaurants(Resource):
         )
 
     def post(self):
-        pass
+        return Response(status=200)
 
 
 class Order(Resource):
@@ -72,8 +73,8 @@ class Order(Resource):
         amount: amount of food being ordered in a list
         description: the location of the order"""
 
-        if check_request_json(request):
-            return check_request_json(request)
+        if check_request_json(request, Orders):
+            return check_request_json(request, Orders)
 
         try:
             user_id = session[
