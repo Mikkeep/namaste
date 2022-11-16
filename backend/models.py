@@ -81,7 +81,7 @@ class Orders(DB.Model):
         """
         Define the JSON schema for database model
         """
-        schema = {"type": "object", "required": ["user_id", "rest_id", "item_id", "amount", "description"]}
+        schema = {"type": "object", "required": ["rest_id", "item_id", "amount", "description"]}
         props = schema["properties"] = {}
         props["description"] = {
             "description": "Description of the order",
