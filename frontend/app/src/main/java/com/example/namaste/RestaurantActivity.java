@@ -3,6 +3,7 @@ package com.example.namaste;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -79,10 +84,30 @@ public class RestaurantActivity extends AppCompatActivity {
         Response response = postReq.doPostRequest(rId, btnId, "1", "Oulu", sId, "restaurant/order/");
 
         if(response.toString().contains("200")) {
-            Toast.makeText(RestaurantActivity.this, "Order sent to cart!", Toast.LENGTH_SHORT).show();
+            // checks if internal storage is available for read/write
+            if(isExternalStorageAvailableForRW()) {
+                File file = new File(Environment.getExternalStorageDirectory()+"/Documents", "orders.txt");
+                String fileContent = "sessionID: " + sId + " restaurandId: " + rId + " itemId: " + btnId + "\n";
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(file);
+                    fos.write(fileContent.getBytes(StandardCharsets.UTF_8));
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(RestaurantActivity.this, "Order sent to cart!", Toast.LENGTH_SHORT).show();
+            }
         } else {
-            Toast.makeText(RestaurantActivity.this, "Clicked button " + btn.getId(), Toast.LENGTH_SHORT).show();
-            //Toast.makeText(RestaurantActivity.this, "Error in order.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RestaurantActivity.this, "Error in order.", Toast.LENGTH_SHORT).show();
         }
     };
+
+    private boolean isExternalStorageAvailableForRW() {
+        String extStorageState = Environment.getExternalStorageState();
+        if(extStorageState.equals((Environment.MEDIA_MOUNTED))) {
+            return true;
+        }
+        return false;
+    }
 }
