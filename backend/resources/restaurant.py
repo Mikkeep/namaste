@@ -75,7 +75,7 @@ class Order(Resource):
 
         if check_request_json(request, Orders):
             return check_request_json(request, Orders)
-
+            
         try:
             user_id = session[
                 "id"
