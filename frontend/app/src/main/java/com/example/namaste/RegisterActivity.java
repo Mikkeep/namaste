@@ -9,6 +9,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import okhttp3.Response;
 
 
@@ -33,10 +36,17 @@ public class RegisterActivity extends AppCompatActivity {
 
         registerButton.setOnClickListener(view -> {
             OkHttpPostRequest postReq = new OkHttpPostRequest();
-            String msg = String.format("{\r\n    \"username\": \"%s\",\r\n    \"password\": \"%s\"\r\n}", username.getText().toString(), password.getText().toString());
-            Log.d("message content: ", msg);
 
-            Response response = postReq.doPostRequest(username.getText().toString(), password.getText().toString(), null, null, null, "users/register");
+            String msg = null;
+            try {
+                msg = new JSONObject()
+                        .put("username", username.getText().toString())
+                        .put("password", password.getText().toString())
+                        .toString();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Response response = postReq.doPostRequest("users/register", msg, null);
             Log.d("response was: ", response.toString());
             if (response.toString().contains("200")) {
                 Toast.makeText(RegisterActivity.this, "Register successful!", Toast.LENGTH_SHORT).show();
