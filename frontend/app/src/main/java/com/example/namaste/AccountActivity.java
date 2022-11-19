@@ -1,10 +1,10 @@
 package com.example.namaste;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class AccountActivity extends AppCompatActivity {
 
@@ -23,7 +23,7 @@ public class AccountActivity extends AppCompatActivity {
         String username = this.getIntent().getStringExtra("USERNAME");
         String usernameSuffixed;
         if (username.endsWith("s")) {
-             usernameSuffixed = username.concat("' ");
+            usernameSuffixed = username.concat("' ");
         } else {
             usernameSuffixed = username.concat("'s ");
         }
