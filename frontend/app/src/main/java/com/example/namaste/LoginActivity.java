@@ -48,15 +48,13 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Login success!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
                 intent.putExtra("EXTRA_SESSION_ID", response.headers().get("Set-Cookie"));
-                String sUsername;
-                boolean sIsAdmin;
-
                 try {
                     JSONObject bodyJson = new JSONObject(Objects.requireNonNull(response.body()).string());
-                    sUsername = bodyJson.getString("name");
-                    //sIsAdmin = bodyJson.getBoolean("isAdmin"); // !!! REMOVE THIS LINE AFTER PROPER IMPLEMENTATION
-                    boolean temp = username.getText().toString().equals("Admin");
-                    intent.putExtra("IS_ADMIN", temp);
+                    String sUsername = bodyJson.getString("name");
+                    int adminVal = bodyJson.getInt("is_admin");
+                    boolean sIsAdmin = adminVal == 1;
+
+                    intent.putExtra("IS_ADMIN", sIsAdmin);
                     intent.putExtra("USERNAME", sUsername);
                 } catch (JSONException | IOException e) {
                     e.printStackTrace();

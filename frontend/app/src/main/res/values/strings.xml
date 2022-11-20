@@ -31,6 +31,9 @@
         Licensed under GNU GPL v3.0
     </string>
 
+    <string name="license_pdf">license.pdf</string>
+
+
     <!-- toggle button for the navigation drawer -->
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
