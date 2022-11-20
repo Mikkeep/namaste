@@ -14,10 +14,14 @@
         android:text="@string/about_body_text"
         android:textSize="20sp"/>
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal|bottom"
-        android:text="@string/about_license_text" />
+        android:text="@string/about_license_text"
+        android:onClick="onLicenseClick"
+        android:clickable="true"
+        tools:ignore="UsingOnClickInXml"
+        android:focusable="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -39,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton.setOnClickListener(view -> {
             OkHttpPostRequest postReq = new OkHttpPostRequest();
+
             String msg = null;
             try {
                 msg = new JSONObject()
@@ -62,9 +63,9 @@ public class LoginActivity extends AppCompatActivity {
                     try {
                         JSONObject bodyJson = new JSONObject(Objects.requireNonNull(response.body()).string());
                         sUsername = bodyJson.getString("name");
-                        //sIsAdmin = bodyJson.getBoolean("isAdmin"); // !!! REMOVE THIS LINE AFTER PROPER IMPLEMENTATION
-                        boolean temp = username.getText().toString().equals("Admin");
-                        intent.putExtra("IS_ADMIN", temp);
+                        int adminVal = bodyJson.getInt("is_admin");
+                        boolean sIsAdmin = adminVal == 1;
+                        intent.putExtra("IS_ADMIN", sIsAdmin);
                         intent.putExtra("USERNAME", sUsername);
                     } catch (JSONException | IOException e) {
                         e.printStackTrace();

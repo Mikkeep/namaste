@@ -1,14 +1,30 @@
 package com.example.namaste;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_UNSPECIFIED;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import android.content.pm.PackageManager;
+import android.os.Environment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.util.Log;
@@ -32,14 +48,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+        
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private NavigationView navigationView;
+    private static final int PERMISSION_REQUEST_CODE = 200;
+
     ArrayList<String> restNames = new ArrayList<>();
     ArrayList<String> restDesc = new ArrayList<>();
     ArrayList<JSONObject> restItems = new ArrayList<>();
@@ -108,6 +134,7 @@ public class MainActivity extends AppCompatActivity
         };
 
         OkHttpGetRequest getReq = new OkHttpGetRequest();
+
         Response response = getReq.doGetRequest("restaurant/all", sId);
         JSONObject json;
 
@@ -174,6 +201,8 @@ public class MainActivity extends AppCompatActivity
         // show admin navigation item
         navigationView.getMenu().findItem(R.id.nav_admin).setVisible(sIsAdmin);
         navigationView.setNavigationItemSelectedListener(this);
+
+        getLicenseFile();
     }
 
     // click listener for the navigation drawer items
@@ -195,6 +224,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(myIntent);
             } else if (id == R.id.nav_about) {
                 myIntent = new Intent(getApplicationContext(), AboutActivity.class);
+                myIntent.putExtra("EXTRA_SESSION_ID", sId);
                 startActivity(myIntent);
             } else if (id == R.id.nav_logout) {
                 OkHttpPostRequest logoutPostReq = new OkHttpPostRequest();
@@ -231,4 +261,63 @@ public class MainActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
+    // click listener for the restaurant buttons
+    private final View.OnClickListener restaurantButtonListener = (v) -> {
+        // check which button was clicked
+        Button btn = (Button) v;
+        Integer id = btn.getId();
+        Toast.makeText(MainActivity.this, "Clicked button " + btn.getId(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, RestaurantActivity.class);
+        intent.putExtra("id", id);
+        intent.putExtra("name", btn.getText());
+        intent.putExtra("userId", sId);
+        Log.d("name of restaurant", btn.getText().toString());
+        intent.putExtra("products", restItems.get(id - 1).toString());
+        startActivity(intent);
+    };
+
+    // get license file from backend
+    private void getLicenseFile() {
+        if (checkPermission()) {
+            Toast.makeText(this, "File Permission OK", Toast.LENGTH_SHORT).show();
+        } else {
+            requestPermission();
+        }
+        OkHttpGetRequest getReq = new OkHttpGetRequest();
+        Response response = getReq.doGetRequest(sId, "file");
+
+        try {
+            File file = new File(Environment.getExternalStorageDirectory() + "/Documents/" + "license.pdf");
+            ResponseBody rb = Objects.requireNonNull(response.body());
+            FileOutputStream fOut = new FileOutputStream(file);
+            InputStream bodyStream = rb.byteStream();
+            byte[] buffer = new byte[1024];
+            int n = 0;
+            do {
+                n = bodyStream.read(buffer, 0, 1024);
+                //Log.d("Read bytes:", String.valueOf(n));
+                if (n >= 0) fOut.write(buffer, 0, n);
+            } while (n != -1);
+            fOut.close();
+            Log.d("File operation", "File save successful!");
+            //Toast.makeText(this, "File get success!", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // check if device has given permission to write to external memory
+    private boolean checkPermission() {
+        int permission1 = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
+        int permission2 = ContextCompat.checkSelfPermission(getApplicationContext(), READ_EXTERNAL_STORAGE);
+        return permission1 == PackageManager.PERMISSION_GRANTED && permission2 == PackageManager.PERMISSION_GRANTED;
+    }
+
+    // request permission to write to external memory
+    private void requestPermission() {
+        // requesting permissions if not provided.
+        ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+    }
+
 }
