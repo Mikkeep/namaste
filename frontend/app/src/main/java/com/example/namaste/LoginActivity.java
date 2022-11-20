@@ -58,10 +58,8 @@ public class LoginActivity extends AppCompatActivity {
                     Intent intent = new Intent(view.getContext(), MainActivity.class);
                     intent.putExtra("EXTRA_SESSION_ID", response.headers().get("Set-Cookie"));
                     String sUsername;
-                    boolean sIsAdmin;
-
                     try {
-                        JSONObject bodyJson = new JSONObject(Objects.requireNonNull(response.body()).string());
+                        JSONObject bodyJson = new JSONObject(response.body().string());
                         sUsername = bodyJson.getString("name");
                         int adminVal = bodyJson.getInt("is_admin");
                         boolean sIsAdmin = adminVal == 1;

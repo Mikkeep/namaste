@@ -10,7 +10,6 @@ import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +22,6 @@ public class AboutActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        String sId = getIntent().getStringExtra("EXTRA_SESSION_ID");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         ActionBar actionBar = getSupportActionBar();
