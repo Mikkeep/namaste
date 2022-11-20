@@ -6,6 +6,7 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_UNSPECIFIED;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
@@ -18,6 +19,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.util.Log;
@@ -26,17 +33,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -51,15 +61,31 @@ import okhttp3.ResponseBody;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+        
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private NavigationView navigationView;
     private static final int PERMISSION_REQUEST_CODE = 200;
 
-
     ArrayList<String> restNames = new ArrayList<>();
     ArrayList<String> restDesc = new ArrayList<>();
     ArrayList<JSONObject> restItems = new ArrayList<>();
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private NavigationView navigationView;
     private String sId;
+    // click listener for the restaurant buttons
+    private final View.OnClickListener restaurantButtonListener = (v) -> {
+        // check which button was clicked
+        Button btn = (Button) v;
+        Integer id = btn.getId();
+        Toast.makeText(MainActivity.this, "Clicked button " + btn.getId(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, RestaurantActivity.class);
+        intent.putExtra("id", id);
+        intent.putExtra("name", btn.getText());
+        intent.putExtra("userId", sId);
+        Log.d("name of restaurant", btn.getText().toString());
+        intent.putExtra("products", restItems.get(id - 1).toString());
+        startActivity(intent);
+    };
     private boolean sIsAdmin;
     private String sUsername;
 
@@ -108,7 +134,8 @@ public class MainActivity extends AppCompatActivity
         };
 
         OkHttpGetRequest getReq = new OkHttpGetRequest();
-        Response response = getReq.doGetRequest(sId, "restaurant/all");
+
+        Response response = getReq.doGetRequest("restaurant/all", sId);
         JSONObject json;
 
         // Getting restaurant data from backend
@@ -201,8 +228,8 @@ public class MainActivity extends AppCompatActivity
                 startActivity(myIntent);
             } else if (id == R.id.nav_logout) {
                 OkHttpPostRequest logoutPostReq = new OkHttpPostRequest();
-                Response resp = logoutPostReq.doPostRequest(null, null, null, null, sId, "users/logout");
-                if (resp.toString().contains("200")){
+                Response resp = logoutPostReq.doPostRequest("users/logout", null, sId);
+                if (resp.toString().contains("200")) {
                     resp.close();
                     myIntent = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivity(myIntent);
