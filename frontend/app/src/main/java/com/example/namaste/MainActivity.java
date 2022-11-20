@@ -34,14 +34,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
@@ -65,13 +57,14 @@ public class MainActivity extends AppCompatActivity
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private NavigationView navigationView;
     private static final int PERMISSION_REQUEST_CODE = 200;
-
     ArrayList<String> restNames = new ArrayList<>();
     ArrayList<String> restDesc = new ArrayList<>();
     ArrayList<JSONObject> restItems = new ArrayList<>();
-    private ActionBarDrawerToggle actionBarDrawerToggle;
-    private NavigationView navigationView;
+
     private String sId;
+    private boolean sIsAdmin;
+    private String sUsername;
+
     // click listener for the restaurant buttons
     private final View.OnClickListener restaurantButtonListener = (v) -> {
         // check which button was clicked
@@ -86,8 +79,6 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra("products", restItems.get(id - 1).toString());
         startActivity(intent);
     };
-    private boolean sIsAdmin;
-    private String sUsername;
 
     @Override
     protected void onResume() {
@@ -224,7 +215,6 @@ public class MainActivity extends AppCompatActivity
                 startActivity(myIntent);
             } else if (id == R.id.nav_about) {
                 myIntent = new Intent(getApplicationContext(), AboutActivity.class);
-                myIntent.putExtra("EXTRA_SESSION_ID", sId);
                 startActivity(myIntent);
             } else if (id == R.id.nav_logout) {
                 OkHttpPostRequest logoutPostReq = new OkHttpPostRequest();
@@ -262,21 +252,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    // click listener for the restaurant buttons
-    private final View.OnClickListener restaurantButtonListener = (v) -> {
-        // check which button was clicked
-        Button btn = (Button) v;
-        Integer id = btn.getId();
-        Toast.makeText(MainActivity.this, "Clicked button " + btn.getId(), Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, RestaurantActivity.class);
-        intent.putExtra("id", id);
-        intent.putExtra("name", btn.getText());
-        intent.putExtra("userId", sId);
-        Log.d("name of restaurant", btn.getText().toString());
-        intent.putExtra("products", restItems.get(id - 1).toString());
-        startActivity(intent);
-    };
-
     // get license file from backend
     private void getLicenseFile() {
         if (checkPermission()) {
@@ -285,15 +260,16 @@ public class MainActivity extends AppCompatActivity
             requestPermission();
         }
         OkHttpGetRequest getReq = new OkHttpGetRequest();
-        Response response = getReq.doGetRequest(sId, "file");
+        Response response = getReq.doGetRequest("file", sId);
 
         try {
             File file = new File(Environment.getExternalStorageDirectory() + "/Documents/" + "license.pdf");
-            ResponseBody rb = Objects.requireNonNull(response.body());
+            ResponseBody rb = response.body();
             FileOutputStream fOut = new FileOutputStream(file);
+            assert rb != null;
             InputStream bodyStream = rb.byteStream();
             byte[] buffer = new byte[1024];
-            int n = 0;
+            int n;
             do {
                 n = bodyStream.read(buffer, 0, 1024);
                 //Log.d("Read bytes:", String.valueOf(n));

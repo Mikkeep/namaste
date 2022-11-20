@@ -86,7 +86,7 @@ public class OkHttpGetRequest {
 
         Response response = null;
 
-        if (reqType.contains("restaurant/all")) {
+        if (url.contains("restaurant/all")) {
             Request newReq = new Request.Builder()
                     .addHeader("Cookie", "session=" + cookie)
                     .url(url)
@@ -100,7 +100,7 @@ public class OkHttpGetRequest {
             }
         }
 
-        if (reqType.contains("file")) {
+        if (url.contains("file")) {
             Request newReq = new Request.Builder()
                     .addHeader("Cookie", "session=" + cookie)
                     .url(url)
@@ -113,7 +113,6 @@ public class OkHttpGetRequest {
                 e.printStackTrace();
             }
         }
-
 
         return response;
     }
