@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Move one folder back to use flask commands on package
-#cd ..
+cd ..
 
 # Initialize database
 python3 -m flask init-db
