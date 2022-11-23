@@ -98,10 +98,15 @@ class Order(Resource):
         return Response(status=200, response=json.dumps("Order complete!"))
 
 
+class OrderHistory(Resource):
+
     @ensure_login
-    def get(self):
+    def post(self):
         """Get all the orders made by session ID"""
-        user_id = session["id"]
+        if request.json.get("user_id"):
+            user_id = request.json.get("user_id")
+        else:
+            user_id = session["id"]
 
         orders = DB.session.query(Orders).filter(Orders.user_id == user_id).all()
 

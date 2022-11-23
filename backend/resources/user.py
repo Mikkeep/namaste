@@ -170,6 +170,7 @@ def user_admin_modify(statement, username):
         return Response(status=400, response=json.dumps("Something went wrong."))
     return Response(status=200)
 
+
 def check_register_password(password: str):
     if len(password) > 3 and len(password) < 9:
         for letter in password:
