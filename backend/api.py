@@ -5,8 +5,8 @@ from flask import Blueprint
 from flask_restful import Api
 
 from .resources.user import *
-from .resources.restaurant import Restaurants, Order
-from .resources.file_handling import getFile
+from .resources.restaurant import Restaurants, Order, OrderHistory
+from .resources.file_handling import GetFile
 
 API_BP = Blueprint("api", __name__, url_prefix="/api")
 API = Api(API_BP)
@@ -19,4 +19,5 @@ API.add_resource(UserAdminElevate, "/users/admin/elevate/")
 API.add_resource(UserAdminDelevate, "/users/admin/delevate/")
 API.add_resource(Restaurants, "/restaurant/all/")
 API.add_resource(Order, "/restaurant/order/")
-API.add_resource(getFile, "/file/")
+API.add_resource(GetFile, "/file/")
+API.add_resource(OrderHistory, "/restaurant/order/history/")
