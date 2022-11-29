@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity
         // Getting restaurant data from backend
         try {
             String responseData = response.body().string();
+            Log.d("asd 1", responseData);
             json = new JSONObject(responseData);
             JSONArray jsonData = json.getJSONArray("restaurants");
             Log.d("asd jsonData", jsonData.toString());

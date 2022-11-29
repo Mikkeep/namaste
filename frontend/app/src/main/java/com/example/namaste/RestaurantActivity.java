@@ -53,7 +53,7 @@ public class RestaurantActivity extends AppCompatActivity {
             // checks if internal storage is available for read/write
             if (isExternalStorageAvailableForRW()) {
                 File file = new File(Environment.getExternalStorageDirectory() + "/Documents", "orders.txt");
-                String fileContent = "sessionID: " + sId + " restaurandId: " + rId + " itemId: " + btnId + "\n";
+                String fileContent = "sessionID: " + sId + "\n";
                 FileOutputStream fos = null;
                 try {
                     fos = new FileOutputStream(file);

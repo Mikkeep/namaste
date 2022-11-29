@@ -118,6 +118,7 @@ public class OkHttpPostRequest {
             e.printStackTrace();
         }
         Log.d("OKHTTP3", String.valueOf(response));
+        Log.d("OKHTTP3", String.valueOf(response.body()));
         return response;
     }
 }
