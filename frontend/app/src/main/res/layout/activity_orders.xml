@@ -6,10 +6,16 @@
     tools:context=".OrdersActivity"
     tools:ignore="HardcodedText">
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="ORDERS"/>
-
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textSize="20dp"
+            android:gravity="center"
+            android:id="@+id/tvLoad">
+        </TextView>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

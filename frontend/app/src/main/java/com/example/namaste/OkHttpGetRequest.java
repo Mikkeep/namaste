@@ -113,7 +113,7 @@ public class OkHttpGetRequest {
                 e.printStackTrace();
             }
         }
-
+        Log.d("OKHTTP3 get", String.valueOf(response.body()));
         return response;
     }
 }
