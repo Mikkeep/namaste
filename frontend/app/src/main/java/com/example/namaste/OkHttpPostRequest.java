@@ -73,14 +73,8 @@ public class OkHttpPostRequest {
                 .permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        //        OkHttpClient client = new OkHttpClient.Builder()
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-//                .connectionSpecs(Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.CLEARTEXT))
-//                .followSslRedirects(true)
-//                .followRedirects(true)
-//                .build();
 
-//        OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder = configureToIgnoreCertificate(builder);
 
         OkHttpClient client = null;
