@@ -7,6 +7,7 @@ from .. import DB
 
 from backend.models import Restaurant, Item, Orders
 from ..constants import JSON, HIDDEN_RESTAURANT
+import random
 from ..utils import (
     ensure_login,
     get_db,
@@ -75,7 +76,7 @@ class Order(Resource):
 
         if check_request_json(request, Orders):
             return check_request_json(request, Orders)
-            
+
         try:
             user_id = session[
                 "id"
@@ -99,7 +100,6 @@ class Order(Resource):
 
 
 class OrderHistory(Resource):
-
     @ensure_login
     def post(self):
         """Get all the orders made by session ID"""
@@ -117,10 +117,15 @@ class OrderHistory(Resource):
                 Item.id == order.item_id, Restaurant.id == order.rest_id
             )
             for item, restaurant in query_result:
+                cardnum = ""
+                for _ in range(0, 12):
+                    val = random.randint(1, 9)
+                    cardnum = cardnum + str(val)
                 resp[i]["item_name"] = item.name
                 resp[i]["rest_name"] = restaurant.name
                 resp[i]["amount"] = order.amount
-                resp[i]["description"] = order.description
+                resp[i]["description"] = (order.description,)
+                resp[i]["cardnumber"]: cardnum
 
         if resp == None:
             return Response(status=200, response=json.dumps("Orders not found!"))
