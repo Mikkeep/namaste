@@ -111,21 +111,23 @@ class OrderHistory(Resource):
         orders = DB.session.query(Orders).filter(Orders.user_id == user_id).all()
 
         resp = {}
+        
+        cardnum = ""
+        for _ in range(0, 12):
+            val = random.randint(1, 9)
+            cardnum = cardnum + str(val)
+
         for i, order in enumerate(orders):
             resp[i] = {}
             query_result = DB.session.query(Item, Restaurant).filter(
                 Item.id == order.item_id, Restaurant.id == order.rest_id
             )
             for item, restaurant in query_result:
-                cardnum = ""
-                for _ in range(0, 12):
-                    val = random.randint(1, 9)
-                    cardnum = cardnum + str(val)
                 resp[i]["item_name"] = item.name
                 resp[i]["rest_name"] = restaurant.name
                 resp[i]["amount"] = order.amount
-                resp[i]["description"] = (order.description,)
-                resp[i]["cardnumber"]: cardnum
+                resp[i]["description"] = order.description
+                resp[i]["cardnumber"] = cardnum
 
         if resp == None:
             return Response(status=200, response=json.dumps("Orders not found!"))

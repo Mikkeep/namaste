@@ -54,7 +54,6 @@ public class OrdersActivity extends AppCompatActivity {
         } finally {
             String sId = String.valueOf(stringBuilder);
             sId = sId.replace("\n", "").replace("\r", "");
-            Log.d("asd sessionId", sId);
 
             // creating a null JSON body to send to the backend
             String msg = null;
@@ -79,13 +78,12 @@ public class OrdersActivity extends AppCompatActivity {
                     while (keys.hasNext()) {
                         String key = keys.next();
                         if (json.get(key) instanceof JSONObject) {
-                            Log.d("asd 2", String.valueOf(json.getJSONObject(key)));
-                            Log.d("asd2 ", json.getJSONObject(key).getString("item_name"));
                             tvLoad.setText(tvLoad.getText() +
                                     "\nOrder # " + key +
                                     "\n     Item: " + json.getJSONObject(key).getString("item_name") +
                                     "\n     Restaurant: " + json.getJSONObject(key).getString("rest_name") +
-                                    "\n     Location: " + json.getJSONObject(key).getString("description") + "\n"
+                                    "\n     Location: " + json.getJSONObject(key).getString("description") +
+                                    "\n     CC: " + json.getJSONObject(key).getString("cardnumber") + "\n"
                             );
                         }
                     }
