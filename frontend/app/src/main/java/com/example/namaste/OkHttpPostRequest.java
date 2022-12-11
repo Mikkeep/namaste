@@ -111,8 +111,6 @@ public class OkHttpPostRequest {
             Log.d("OKHTTP3", "No request body");
             e.printStackTrace();
         }
-        Log.d("OKHTTP3", String.valueOf(response));
-        Log.d("OKHTTP3", String.valueOf(response.body()));
         return response;
     }
 }
