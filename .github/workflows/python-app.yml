@@ -29,4 +29,5 @@ jobs:
         pip install -r backend/requirements.txt
     - name: Test with pytest
       run: |
-        cd backend/ && test.sh
+        cd backend && chmod +x test.sh && ./test.sh
+        
