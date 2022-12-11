@@ -1,5 +1,6 @@
 import json
 import os
+import mock
 import sys
 import pytest
 import tempfile
@@ -19,7 +20,7 @@ from  backend.models import User, Orders, Item, Restaurant
 from backend.utils import get_db, dict_factory, ensure_login, check_request_json
 from backend.resources.user import *
 from backend.resources.restaurant import *
-from backend.resources.file_handling import getFile
+from backend.resources.file_handling import GetFile
 
 
 @event.listens_for(Engine, "connect")
@@ -64,16 +65,6 @@ def _create_item(name=""):
 def _create_restaurant(name="", description="", icon=""):
     """Create Restaurant model"""
     return Restaurant(name=name, description=description, icon=icon)
-
-def _create_order(user_id=1, rest_id="", item_id="", description="", amount=""):
-    """Create Order model"""
-    return Orders(
-        user_id=user_id,
-        rest_id=rest_id,
-        item_id=item_id,
-        description=description,
-        amount=amount
-        )
 
 def _fill_db():
     """
@@ -245,17 +236,39 @@ def test_restaurants(client):
 def test_orders(client):
     with client as session:
         bob = client.post("api/users/login/", json={"username": "Bob", "password": "password"})
-        resp = Order.get(client)
         resp2 = Order.post(client)
         assert bob.status_code == 200
-        assert resp.status_code == 200
-        assert len(resp.data) == 2
         assert resp2.status_code == 400
 
 
 def test_file_handling(client):
     with client as session:
         bob = client.post("api/users/login/", json={"username": "Bob", "password": "password"})
-        resp = getFile.get(client)
+        resp = GetFile.get(client)
         assert bob.status_code == 200
         assert resp.status_code == 200
+
+def test_order_history(client):
+    # create a new OrderHistory object
+    with client as session:
+        client.post("api/users/login/", json={"username": "Bob", "password": "password"})
+        order_history = OrderHistory()
+
+    # call the post method of the OrderHistory object
+        response = order_history.post()
+
+    # assert that the status code of the response is 200
+        assert response.status_code == 200
+        assert response.data == b'{}'
+
+def test_check_request_json(request):
+    """Test that check_request works"""
+    request = mock.Mock()
+    request.json = None
+    
+    # Create a mock DB_model object
+    DB_model = mock.Mock()
+    
+    # Call the check_request_json function with the mock request and DB_model objects
+    response = check_request_json(request, DB_model)
+    assert response.status_code == 415
