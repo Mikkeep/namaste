@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    style="@style/Theme.NAMASTE">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="match_parent"
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="admin panel content here" />
+        android:divider="@color/black"
+        android:dividerHeight="1dp"
+        android:listSelector="@color/default_light_blue" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

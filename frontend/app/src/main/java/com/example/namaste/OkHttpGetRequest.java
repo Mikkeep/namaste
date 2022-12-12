@@ -113,7 +113,21 @@ public class OkHttpGetRequest {
                 e.printStackTrace();
             }
         }
-        Log.d("OKHTTP3 get", String.valueOf(response.body()));
+
+        if (url.contains("users")) {
+            Request newReq = new Request.Builder()
+                    .addHeader("Cookie", "session=" + cookie)
+                    .url(url)
+                    .build();
+            try {
+                response = client.newCall(newReq).execute();
+                Log.d("OKHTTP3", "Request done, got the response");
+            } catch (IOException e) {
+                Log.d("OKHTTP3", "Exception while doing request.");
+                e.printStackTrace();
+            }
+        }
+
         return response;
     }
 }

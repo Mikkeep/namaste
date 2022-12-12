@@ -7,7 +7,7 @@
     tools:context=".AboutActivity"
     tools:ignore="HardcodedText">
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="top|center"
@@ -17,11 +17,13 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal|bottom"
-        android:text="@string/about_license_text"
-        android:onClick="onLicenseClick"
         android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal|bottom"
+        android:onClick="onLicenseClick"
+        android:text="@string/about_license_text"
         tools:ignore="UsingOnClickInXml"
-        android:focusable="true" />
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -130,7 +130,7 @@ class UserAdminElevate(Resource):
 
         success = user_admin_modify(True, username)
         if success:
-            return user_admin_modify
+            return success
 
 
 class UserAdminDelevate(Resource):
