@@ -141,7 +141,7 @@ class UserAdminDelevate(Resource):
         """POST method for de-elevating user"""
 
         if check_request_json(request, User):
-            return check_request_json(request)
+            return check_request_json(request, User)
 
         username = request.json.get("command")
 
