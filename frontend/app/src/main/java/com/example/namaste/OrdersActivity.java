@@ -65,7 +65,7 @@ public class OrdersActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             OkHttpPostRequest postReq = new OkHttpPostRequest();
-            Response response = postReq.doPostRequest("restaurant/order/history", msg, sId);
+            Response response = postReq.doPostRequest("restaurant/order/history/", msg, sId);
             JSONObject json;
 
 
