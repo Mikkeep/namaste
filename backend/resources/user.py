@@ -118,8 +118,8 @@ class UserAdminElevate(Resource):
     def post(self):
         """POST method functionality for admin elevation"""
 
-        if check_request_json(request, User):
-            return check_request_json(request, User)
+#        if check_request_json(request, User):
+#            return check_request_json(request, User)
 
         username = request.json.get("command")
 
@@ -140,8 +140,8 @@ class UserAdminDelevate(Resource):
     def post(self):
         """POST method for de-elevating user"""
 
-        if check_request_json(request, User):
-            return check_request_json(request, User)
+#        if check_request_json(request, User):
+#            return check_request_json(request, User)
 
         username = request.json.get("command")
 
