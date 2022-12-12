@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        
+
         loginButton.setOnClickListener(view -> {
             OkHttpPostRequest postReq = new OkHttpPostRequest();
 
@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            Response response = postReq.doPostRequest("users/login", msg, null);
+            Response response = postReq.doPostRequest("users/login/", msg, null);
             if (response != null) {
                 if (response.toString().contains("200")) {
                     Toast.makeText(LoginActivity.this, "Login success!", Toast.LENGTH_SHORT).show();

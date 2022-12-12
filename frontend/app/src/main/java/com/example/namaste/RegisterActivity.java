@@ -46,7 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            Response response = postReq.doPostRequest("users/register", msg, null);
+            Response response = postReq.doPostRequest("users/register/", msg, null);
             Log.d("response was: ", response.toString());
             if (response.toString().contains("200")) {
                 Toast.makeText(RegisterActivity.this, "Register successful!", Toast.LENGTH_SHORT).show();

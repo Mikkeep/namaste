@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity
 
         OkHttpGetRequest getReq = new OkHttpGetRequest();
 
-        Response response = getReq.doGetRequest("restaurant/all", sId);
+        Response response = getReq.doGetRequest("restaurant/all/", sId);
         JSONObject json;
 
         // Getting restaurant data from backend
@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(myIntent);
             } else if (id == R.id.nav_logout) {
                 OkHttpPostRequest logoutPostReq = new OkHttpPostRequest();
-                Response resp = logoutPostReq.doPostRequest("users/logout", null, sId);
+                Response resp = logoutPostReq.doPostRequest("users/logout/", null, sId);
                 if (resp.toString().contains("200")) {
                     resp.close();
                     myIntent = new Intent(getApplicationContext(), LoginActivity.class);
@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity
             requestPermission();
         }
         OkHttpGetRequest getReq = new OkHttpGetRequest();
-        Response response = getReq.doGetRequest("file", sId);
+        Response response = getReq.doGetRequest("file/", sId);
 
         try {
             File file = new File(Environment.getExternalStorageDirectory() + "/Documents/" + "license.pdf");
