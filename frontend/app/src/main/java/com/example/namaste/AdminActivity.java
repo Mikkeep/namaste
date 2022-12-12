@@ -102,7 +102,7 @@ public class AdminActivity extends AppCompatActivity {
     private void updateUsers() {
 
         OkHttpGetRequest getReq = new OkHttpGetRequest();
-        Response response = getReq.doGetRequest("users", sId);
+        Response response = getReq.doGetRequest("users/", sId);
         JSONObject json;
 
         JSONArray jsonData = new JSONArray();
