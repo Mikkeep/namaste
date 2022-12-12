@@ -152,7 +152,7 @@ class UserAdminDelevate(Resource):
 
         success = user_admin_modify(False, username)
         if success:
-            return user_admin_modify
+            return success
 
 
 def user_admin_modify(statement, username):
