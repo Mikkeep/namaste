@@ -33,6 +33,7 @@
 
     <string name="license_pdf">license.pdf</string>
 
+    <string name="ok">OK</string>
 
     <!-- toggle button for the navigation drawer -->
     <string name="nav_open">Open</string>

@@ -16,10 +16,10 @@
         <ImageView
             android:id="@+id/account_profile_image"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:contentDescription="My profile"
             android:layout_centerInParent="true"
-            android:src="@drawable/burger"
+            android:src="@drawable/namastelogo"
             />
 
         <TextView

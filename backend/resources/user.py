@@ -79,7 +79,7 @@ class UserRegister(Resource):
         """Post method for creating an user"""
 
         if check_request_json(request, User):
-            return check_request_json(request)
+            return check_request_json(request, User)
 
         username = request.json.get("username")
         password = request.json.get("password")
@@ -118,8 +118,8 @@ class UserAdminElevate(Resource):
     def post(self):
         """POST method functionality for admin elevation"""
 
-        if check_request_json(request, User):
-            return check_request_json(request)
+#        if check_request_json(request, User):
+#            return check_request_json(request, User)
 
         username = request.json.get("command")
 
@@ -130,7 +130,7 @@ class UserAdminElevate(Resource):
 
         success = user_admin_modify(True, username)
         if success:
-            return user_admin_modify
+            return success
 
 
 class UserAdminDelevate(Resource):
@@ -140,8 +140,8 @@ class UserAdminDelevate(Resource):
     def post(self):
         """POST method for de-elevating user"""
 
-        if check_request_json(request, User):
-            return check_request_json(request)
+#        if check_request_json(request, User):
+#            return check_request_json(request, User)
 
         username = request.json.get("command")
 
@@ -152,7 +152,7 @@ class UserAdminDelevate(Resource):
 
         success = user_admin_modify(False, username)
         if success:
-            return user_admin_modify
+            return success
 
 
 def user_admin_modify(statement, username):
