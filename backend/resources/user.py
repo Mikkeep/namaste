@@ -79,7 +79,7 @@ class UserRegister(Resource):
         """Post method for creating an user"""
 
         if check_request_json(request, User):
-            return check_request_json(request)
+            return check_request_json(request, User)
 
         username = request.json.get("username")
         password = request.json.get("password")
@@ -119,7 +119,7 @@ class UserAdminElevate(Resource):
         """POST method functionality for admin elevation"""
 
         if check_request_json(request, User):
-            return check_request_json(request)
+            return check_request_json(request, User)
 
         username = request.json.get("command")
 
