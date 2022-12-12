@@ -89,8 +89,14 @@ public class LoginActivity extends AppCompatActivity {
                     try {
                         JSONObject bodyJson = new JSONObject(response.body().string());
                         sUsername = bodyJson.getString("name");
-                        int adminVal = bodyJson.getInt("is_admin");
-                        boolean sIsAdmin = adminVal == 1;
+                        // for some reason backend mixes up booleans and integers in admin values so we check for both
+                        boolean sIsAdmin;
+                        try {
+                            sIsAdmin = (bodyJson.getInt("is_admin") == 1);
+                        } catch (JSONException e) {
+                            sIsAdmin = bodyJson.getBoolean("is_admin");
+                        }
+
                         intent.putExtra("IS_ADMIN", sIsAdmin);
                         intent.putExtra("USERNAME", sUsername);
                     } catch (JSONException | IOException e) {

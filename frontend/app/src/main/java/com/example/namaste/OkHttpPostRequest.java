@@ -101,6 +101,8 @@ public class OkHttpPostRequest {
                 .post(reqBody)
                 .build();
 
+        //Log.d("request", newReq.toString() + body);
+
         Response response = null;
         try {
             response = client.newCall(newReq).execute();

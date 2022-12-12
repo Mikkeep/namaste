@@ -131,8 +131,8 @@ public class MainActivity extends AppCompatActivity
 
         // Getting restaurant data from backend
         try {
-            String responseData = response.body().string();
-            Log.d("asd 1", responseData);
+
+            String responseData = Objects.requireNonNull(response.body()).string();
             json = new JSONObject(responseData);
             JSONArray jsonData = json.getJSONArray("restaurants");
             Log.d("asd jsonData", jsonData.toString());
@@ -210,6 +210,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(myIntent);
             } else if (id == R.id.nav_admin) {
                 myIntent = new Intent(getApplicationContext(), AdminActivity.class);
+                myIntent.putExtra("EXTRA_SESSION_ID", sId);
                 startActivity(myIntent);
             } else if (id == R.id.nav_orders) {
                 myIntent = new Intent(getApplicationContext(), OrdersActivity.class);
@@ -255,9 +256,7 @@ public class MainActivity extends AppCompatActivity
 
     // get license file from backend
     private void getLicenseFile() {
-        if (checkPermission()) {
-            Toast.makeText(this, "File Permission OK", Toast.LENGTH_SHORT).show();
-        } else {
+        if (!checkPermission()) {
             requestPermission();
         }
         OkHttpGetRequest getReq = new OkHttpGetRequest();
