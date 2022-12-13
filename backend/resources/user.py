@@ -33,8 +33,8 @@ class GetUsers(Resource):
                 resp[i][key] = user[key]
 
         return Response(
-                status=200, response=json.dumps(resp, indent=4, separators=(",", ": "))
-            )
+            status=200, response=json.dumps(resp, indent=4, separators=(",", ": "))
+        )
 
 
 class UserLogin(Resource):
@@ -118,8 +118,8 @@ class UserAdminElevate(Resource):
     def post(self):
         """POST method functionality for admin elevation"""
 
-#        if check_request_json(request, User):
-#            return check_request_json(request, User)
+        #        if check_request_json(request, User):
+        #            return check_request_json(request, User)
 
         username = request.json.get("command")
 
@@ -140,8 +140,8 @@ class UserAdminDelevate(Resource):
     def post(self):
         """POST method for de-elevating user"""
 
-#        if check_request_json(request, User):
-#            return check_request_json(request, User)
+        #        if check_request_json(request, User):
+        #            return check_request_json(request, User)
 
         username = request.json.get("command")
 
@@ -159,15 +159,12 @@ def user_admin_modify(statement, username):
     """Modify is_admin property in the database
     statement: boolean True or False
     username: name of the user to modify"""
-    try:
-        db = get_db()
-        db.execute(
-            f"UPDATE user SET is_admin = '{statement}' WHERE username = '{username}'"
-        )
-        db.commit()
-        db.close
-    except IntegrityError as e:
-        return Response(status=400, response=json.dumps("Something went wrong."))
+    db = get_db()
+    db.execute(
+        f"UPDATE user SET is_admin = '{statement}' WHERE username = '{username}'"
+    )
+    db.commit()
+    db.close
     return Response(status=200)
 
 
