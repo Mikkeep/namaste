@@ -26,6 +26,22 @@ import kotlin.collections.ArrayDeque;
 import okhttp3.Response;
 
 public class RestaurantActivity extends AppCompatActivity {
+    /*
+      Gets the restaurant items information from MainActivity and uses these to create buttons
+      for each item that the restaurant has.
+
+      Clicking on one of the buttons sends a POST request to /api/restaurants/orders in addition to this
+      the user's session ID is saved to external memory on the device and can be changed from there to
+      search for orders from other users or use the admin id to find all orders.
+
+      The post request contains a JSON in format:
+      {
+        "rest_id": <restaurant_id>,
+        "item_id": <item_id> (currently always 1 because there is only 1 item per restaurant),
+        "amount": <amount> (currently 1 because you can only send one order at a time),
+        "description": "Oulu"
+      }
+     */
     String sId;
     String rId;
     // click listener for the restaurant buttons
@@ -71,10 +87,10 @@ public class RestaurantActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("rest page", "got to restaurant page");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant);
 
+        // gets the information required for POST from the bundle that is sent from MainActivity
         Integer id = getIntent().getIntExtra("id", 0);
         String products = getIntent().getStringExtra("products");
         String userId = getIntent().getStringExtra("userId");
@@ -87,17 +103,13 @@ public class RestaurantActivity extends AppCompatActivity {
 
         List<String> productList = new ArrayDeque<String>(Arrays.asList(products.split(",")));
 
-        Log.d("id in rest page", id.toString());
-        //Log.d("name in rest page", name);
-        Log.d("products in rest page", products);
-
         LinearLayout menuBoard = findViewById(R.id.menuLayout);
         LinearLayout.LayoutParams mp = new LinearLayout.LayoutParams(1000, 300);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-
+        // creates buttons from the items that the restaurant has
         for (int i = 0; i < productList.size(); i++) {
             if (productList.get(i).contains("id:")) {
                 continue;
