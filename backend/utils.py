@@ -70,8 +70,12 @@ def ensure_admin(func):
                 status=401,
                 response=json.dumps("Please log in."),
             )
-        user_priv = DB.session.query(User).filter(User.id == session["id"]).first()
-        if not user_priv.is_admin:
+        user_priv = (
+            DB.session.query(User)
+            .filter(User.id == session["id"], User.is_admin == 1)
+            .first()
+        )
+        if not user_priv:
             return Response(
                 status=403,
                 response=json.dumps("This is an admin API call!"),
