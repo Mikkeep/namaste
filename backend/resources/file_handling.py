@@ -8,9 +8,14 @@ from ..constants import JSON
 
 
 class GetFile(Resource):
-    
-    def get(self):
+    """Returns PDF file from the server"""
+
+    def get(self):  # pragma: no cover
         if platform.system() == "Linux" or platform.system() == "Darwin":
-            return send_file("./resources/file.pdf", "application/pdf", as_attachment=True)
+            return send_file(
+                "./resources/file.pdf", "application/pdf", as_attachment=True
+            )
         elif platform.system() == "Windows":
-            return send_file(".\\resources\\file.pdf", "application/pdf", as_attachment=True)
+            return send_file(
+                ".\\resources\\file.pdf", "application/pdf", as_attachment=True
+            )

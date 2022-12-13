@@ -81,7 +81,10 @@ class Orders(DB.Model):
         """
         Define the JSON schema for database model
         """
-        schema = {"type": "object", "required": ["rest_id", "item_id", "amount", "description"]}
+        schema = {
+            "type": "object",
+            "required": ["rest_id", "item_id", "amount", "description"],
+        }
         props = schema["properties"] = {}
         props["description"] = {
             "description": "Description of the order",
@@ -114,7 +117,7 @@ class Item(DB.Model):
 
 @click.command("init-db")
 @with_appcontext
-def init_db_command():
+def init_db_command():  # pragma: no cover
     """
     Makes 'flask init-db' possible from command line. Initializes DB by
     creating the tables.
@@ -127,7 +130,7 @@ def init_db_command():
 
 @click.command("testgen")
 @with_appcontext
-def generate_test_data():
+def generate_test_data():  # pragma: no cover
     """
     Generate content for database for testing
     """
