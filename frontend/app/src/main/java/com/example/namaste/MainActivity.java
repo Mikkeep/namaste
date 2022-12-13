@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity
         // check which button was clicked
         Button btn = (Button) v;
         Integer id = btn.getId();
-        Toast.makeText(MainActivity.this, "Clicked button " + btn.getId(), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, RestaurantActivity.class);
         intent.putExtra("id", id);
         intent.putExtra("name", btn.getText());

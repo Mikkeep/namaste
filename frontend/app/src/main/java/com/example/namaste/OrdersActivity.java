@@ -27,7 +27,11 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class OrdersActivity extends AppCompatActivity {
-
+    /*
+   Uses the sessionID provided in the external memory that was saved in the previous activity.
+   Posts this into /api/restaurant/order/history to get order information and credit card
+   details from all the orders that the said sessionID has made.
+     */
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,7 @@ public class OrdersActivity extends AppCompatActivity {
 
         TextView tvLoad = findViewById(R.id.tvLoad);
 
+        // Initiate a file reader that targets the file in emulator's external storage
         FileReader fr = null;
         File file = new File(Environment.getExternalStorageDirectory() + "/Documents", "orders.txt");
         StringBuilder stringBuilder = new StringBuilder();
@@ -68,7 +73,7 @@ public class OrdersActivity extends AppCompatActivity {
             Response response = postReq.doPostRequest("restaurant/order/history/", msg, sId);
             JSONObject json;
 
-
+            // If response contains 200 = valid, it will create a list of orders in the orders page
             if (response.toString().contains("200")) {
                 String responseData = null;
                 try {
