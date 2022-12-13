@@ -77,16 +77,14 @@ class Order(Resource):
         if check_request_json(request, Orders):
             return check_request_json(request, Orders)
 
-        try:
-            user_id = session[
-                "id"
-            ]  # Should this be possible to be done without logging in, to allow uses order for other users?
-            rest_id = request.json.get("rest_id")
-            item_id = request.json.get("item_id")
-            amount = request.json.get("amount")
-            desc = request.json.get("description")
-        except:
-            return Response(status=400, response=json.dumps("Invalid JSON"))
+        user_id = session[
+            "id"
+        ]  # Should this be possible to be done without logging in, to allow uses order for other users?
+        rest_id = request.json.get("rest_id")
+        item_id = request.json.get("item_id")
+        amount = request.json.get("amount")
+        desc = request.json.get("description")
+
         print(user_id, rest_id, item_id, amount, desc)
         db = get_db()
         db.execute(
@@ -111,7 +109,7 @@ class OrderHistory(Resource):
         orders = DB.session.query(Orders).filter(Orders.user_id == user_id).all()
 
         resp = {}
-        
+
         cardnum = ""
         for _ in range(0, 12):
             val = random.randint(1, 9)
