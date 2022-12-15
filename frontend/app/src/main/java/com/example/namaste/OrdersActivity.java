@@ -69,6 +69,7 @@ public class OrdersActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            Log.d("ordersSID: ", sId);
             OkHttpPostRequest postReq = new OkHttpPostRequest();
             Response response = postReq.doPostRequest("restaurant/order/history/", msg, sId);
             JSONObject json;
